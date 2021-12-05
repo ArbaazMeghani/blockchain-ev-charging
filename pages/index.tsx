@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Map from "../components/Map";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-row justify-center items-center h-screen w-screen">
-        test
+        <Map />
       </div>
     </div>
   );
