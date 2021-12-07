@@ -1,22 +1,22 @@
-import React, { FC } from "react";
-import GoogleMapReact from "google-map-react";
+import React, { FC, useState } from "react";
+import ReactMapGL from "react-map-gl";
 
 const Map: FC = (): JSX.Element => {
-  const coordinates = {
-    lat: 10,
-    lng: 10,
-  };
+  const [viewport, setViewport] = useState({
+    width: "100vw",
+    height: "100vh",
+    latitude: 41.5868,
+    longitude: -93.625,
+    zoom: 13,
+  });
+
   return (
-    <GoogleMapReact
-      bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-      defaultCenter={coordinates}
-      center={coordinates}
-      defaultZoom={14}
-      margin={[50, 50, 50, 50]}
-      options={{}}
-      onChange={() => console.log("change")}
-      onChildClick={() => console.log("child click")}
-    ></GoogleMapReact>
+    <ReactMapGL
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
+      onViewportChange={(updatedViewport) => setViewport(updatedViewport)}
+      {...viewport}
+    />
   );
 };
 
