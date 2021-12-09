@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import ReactMapGL, { Marker } from "react-map-gl";
 import StationIcon from "../icons/StationIcon";
 
-const Map = () => {
+const Map = ({ stations, location }) => {
   const [viewport, setViewport] = useState({
     width: "100%",
     height: "100%",
-    latitude: 41.5868,
-    longitude: -93.625,
+    latitude: location.latitude,
+    longitude: location.longitude,
     zoom: 13,
   });
 
@@ -20,9 +20,11 @@ const Map = () => {
       }
       {...viewport}
     >
-      <Marker longitude={-93.625} latitude={41.5868}>
-        <StationIcon />
-      </Marker>
+      {stations.map((station) => (
+        <Marker longitude={station.longitude} latitude={station.latitude}>
+          <StationIcon />
+        </Marker>
+      ))}
     </ReactMapGL>
   );
 };
