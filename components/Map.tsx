@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import ReactMapGL from "react-map-gl";
+import ReactMapGL, { Marker } from "react-map-gl";
+import StationIcon from "../icons/StationIcon";
 
 const Map = () => {
   const [viewport, setViewport] = useState({
@@ -18,7 +19,11 @@ const Map = () => {
         setViewport({ ...updatedViewport, width: "100%", height: "100%" })
       }
       {...viewport}
-    />
+    >
+      <Marker longitude={-93.625} latitude={41.5868}>
+        <StationIcon />
+      </Marker>
+    </ReactMapGL>
   );
 };
 
