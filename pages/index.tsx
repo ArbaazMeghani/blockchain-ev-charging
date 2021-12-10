@@ -5,6 +5,7 @@ import Wallet from "../components/Wallet";
 
 const stations = [
   {
+    id: 1,
     title: "1",
     address: "123 w something st",
     price: 4.56,
@@ -12,6 +13,7 @@ const stations = [
     latitude: 31.5868,
   },
   {
+    id: 2,
     title: "2",
     address: "123 w something st",
     price: 4.56,
@@ -19,6 +21,7 @@ const stations = [
     latitude: 32.5868,
   },
   {
+    id: 3,
     title: "3",
     address: "123 w something st",
     price: 4.56,
@@ -26,6 +29,7 @@ const stations = [
     latitude: 33.5868,
   },
   {
+    id: 4,
     title: "4",
     address: "123 w something st",
     price: 4.56,
@@ -33,6 +37,7 @@ const stations = [
     latitude: 34.5868,
   },
   {
+    id: 5,
     title: "5",
     address: "123 w something st",
     price: 4.56,
@@ -40,6 +45,7 @@ const stations = [
     latitude: 35.5868,
   },
   {
+    id: 6,
     title: "6",
     address: "123 w something st",
     price: 4.56,
@@ -47,6 +53,7 @@ const stations = [
     latitude: 36.5868,
   },
   {
+    id: 7,
     title: "7",
     address: "123 w something st",
     price: 4.56,
@@ -54,6 +61,7 @@ const stations = [
     latitude: 37.5868,
   },
   {
+    id: 8,
     title: "8",
     address: "123 w something st",
     price: 4.56,
@@ -61,6 +69,7 @@ const stations = [
     latitude: 38.5868,
   },
   {
+    id: 9,
     title: "9",
     address: "123 w something st",
     price: 4.56,
@@ -68,6 +77,7 @@ const stations = [
     latitude: 39.5868,
   },
   {
+    id: 10,
     title: "10",
     address: "123 w something st",
     price: 4.56,

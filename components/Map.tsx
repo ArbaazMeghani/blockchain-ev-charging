@@ -21,7 +21,11 @@ const Map = ({ stations, location }) => {
       {...viewport}
     >
       {stations.map((station) => (
-        <Marker longitude={station.longitude} latitude={station.latitude}>
+        <Marker
+          longitude={station.longitude}
+          latitude={station.latitude}
+          key={station.id}
+        >
           <StationIcon />
         </Marker>
       ))}

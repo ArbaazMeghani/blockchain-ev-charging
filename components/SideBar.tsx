@@ -14,8 +14,8 @@ const SideBar = ({ stations, setLocation }: SideBarProps) => {
         <SearchBar setLocation={setLocation} />
       </div>
       <div className="m-8">
-        {stations.map((item) => (
-          <SideBarItem item={item} />
+        {stations.map((station) => (
+          <SideBarItem item={station} key={station.id} />
         ))}
       </div>
     </div>

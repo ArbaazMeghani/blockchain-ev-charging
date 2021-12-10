@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const SearchBar = ({ setLocation }) => {
-  const [text, onChangeText] = useState(null);
+  const [text, onChangeText] = useState("");
   return (
     <form onSubmit={() => setLocation(text)}>
       <input
