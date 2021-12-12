@@ -1,8 +1,40 @@
-import React from "react";
-import useWallet from "../hooks/useWallet";
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 
 const Wallet = () => {
-  const wallet = useWallet();
+  const [wallet, setWallet] = useState(null);
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
+  useEffect(() => {
+    const getWallet = async () => {
+      await window.ethereum.enable();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner(accounts[0]);
+      setProvider(provider);
+      setWallet(await signer.getAddress());
+      setSigner(signer);
+    };
+    if (window.ethereum) {
+      getWallet();
+    }
+  }, []);
+
+  const getBalance = async () => {
+    const balance = await signer.getBalance();
+    console.log(balance);
+  };
+
+  const sendTransaction = async (receiver) => {
+    const tx = {
+      to: receiver,
+      value: ethers.utils.parseEther("0.1"),
+    };
+
+    const txHash = await signer.sendTransaction(tx);
+    console.log(txHash);
+  };
+
   return (
     <button className="mr-12 mt-12 absolute top-0 right-0 bg-blue-600 text-gray-200 p-2 rounded-2xl z-0 shadow-xl">
       Connect Wallet
