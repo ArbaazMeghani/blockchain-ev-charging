@@ -7,7 +7,6 @@ const Wallet = () => {
   const [signer, setSigner] = useState(null);
   useEffect(() => {
     const getWallet = async () => {
-      await window.ethereum.enable();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const accounts = await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner(accounts[0]);

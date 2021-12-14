@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Map from "../components/Map";
+import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
 import Wallet from "../components/Wallet";
 
@@ -95,6 +96,7 @@ export default function Home() {
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden">
       <SideBar stations={stations} setLocation={setLocation} />
       <Map stations={stations} location={location} />
+      <PlusButton />
       <Wallet />
     </div>
   );
