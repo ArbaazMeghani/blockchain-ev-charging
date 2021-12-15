@@ -2,6 +2,7 @@ import { useState } from "react";
 import Map from "../components/Map";
 import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
+import Station from "../components/Station";
 import Wallet from "../components/Wallet";
 
 const stations = [
@@ -92,12 +93,20 @@ export default function Home() {
     longitude: -93.625,
     latitude: 41.5868,
   });
+  const [stationData, setStationData] = useState(null);
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden">
       <SideBar stations={stations} setLocation={setLocation} />
       <Map stations={stations} location={location} />
-      <PlusButton />
+      <PlusButton setStationData={setStationData} />
       <Wallet />
+      {stationData && (
+        <Station
+          edit={stationData.edit}
+          station={stationData.station}
+          setStationData={setStationData}
+        />
+      )}
     </div>
   );
 }
