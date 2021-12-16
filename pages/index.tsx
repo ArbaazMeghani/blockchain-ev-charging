@@ -93,7 +93,7 @@ export default function Home() {
     longitude: -93.625,
     latitude: 41.5868,
   });
-  const [stationData, setStationData] = useState(null);
+  const [stationData, setStationData] = useState({ station: stations[0] });
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden">
       <SideBar stations={stations} setLocation={setLocation} />
