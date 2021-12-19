@@ -13,9 +13,6 @@ const SideBarItem = ({ item }) => {
         </h3>
         <h3>${item.price}</h3>
       </div>
-      <button className="rounded-full border-2 border-blue-600 p-2">
-        Directions
-      </button>
     </div>
   );
 };

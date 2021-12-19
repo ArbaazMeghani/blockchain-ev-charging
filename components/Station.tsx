@@ -15,7 +15,7 @@ const Station = ({
         className="h-screen w-screen absolute"
         onClick={() => setStationData(null)}
       />
-      <div className="w-2/3 h-2/3 bg-white">
+      <div className="w-2/3 h-2/3 rounded-lg shadow-2xl bg-indigo-800">
         <div className="flex flex-col justify-between items-center overflow-hidden w-full h-full relative">
           <button
             className="mt-8 mr-8 hover:text-gray-600 transition-colors duration-200 absolute top-0 right-0"
