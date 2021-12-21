@@ -10,7 +10,7 @@ const Station = ({
 }) => {
   const [editMode, setEditMode] = useState(edit);
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-screen overflow-hidden absolute left-0 top-0 bg-gray-400 bg-opacity-80">
+    <div className="flex flex-col justify-center items-center h-screen w-screen overflow-hidden absolute left-0 top-0 bg-gray-900 bg-opacity-80">
       <div
         className="h-screen w-screen absolute"
         onClick={() => setStationData(null)}
