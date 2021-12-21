@@ -36,7 +36,7 @@ const Wallet = () => {
 
   if (!wallet) {
     return (
-      <button className="mr-12 mt-12 absolute top-0 right-0 bg-blue-600 text-gray-200 p-2 rounded-2xl z-0 shadow-xl">
+      <button className="mr-12 mt-12 absolute top-0 right-0 bg-violet-800 p-2 rounded-2xl z-0 shadow-xl">
         Connect Wallet
       </button>
     );
@@ -44,7 +44,7 @@ const Wallet = () => {
 
   return (
     <button
-      className="mr-12 mt-12 absolute top-0 right-0 bg-gray-800 text-gray-200 p-2 rounded-2xl z-0 shadow-xl"
+      className="mr-12 mt-12 absolute top-0 right-0 bg-violet-900 p-2 rounded-2xl z-0 shadow-xl"
       onClick={getBalance}
     >
       {wallet.substring(0, 6)}...{wallet.substring(wallet.length - 4)}

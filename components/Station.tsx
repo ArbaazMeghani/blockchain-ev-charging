@@ -15,7 +15,7 @@ const Station = ({
         className="h-screen w-screen absolute"
         onClick={() => setStationData(null)}
       />
-      <div className="w-2/3 h-2/3 rounded-lg shadow-2xl bg-indigo-800">
+      <div className="w-1/3 h-2/3 rounded-lg shadow-2xl bg-gradient-to-b from-violet-800 to-indigo-900">
         <div className="flex flex-col justify-between items-center overflow-hidden w-full h-full relative">
           <button
             className="mt-8 mr-8 hover:text-gray-600 transition-colors duration-200 absolute top-0 right-0"
@@ -58,17 +58,43 @@ const Station = ({
             </form>
           </div>
           <div className="w-full border-b-2 border-gray-300" />
-          <div className="flex flex-row justify-between items-center">
-            {owner && !editMode && <button>delete</button>}
-            {owner && <button onClick={() => setEditMode(true)}>edit</button>}
-            {editMode && (
-              <button onClick={() => setEditMode(false)}>cancel</button>
+          <div className="flex flex-row justify-between items-center w-full">
+            {owner && !editMode && (
+              <button className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300">
+                delete
+              </button>
+            )}
+            {owner && (
+              <button
+                className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300"
+                onClick={() => setEditMode(true)}
+              >
+                edit
+              </button>
             )}
             {editMode && (
-              <button onClick={() => setEditMode(false)}>save</button>
+              <button
+                className="p-2 rounded-xl border-2 border-slate-800 mb-8 hover:border-slate-900 transition-colors duration-300"
+                onClick={() => setEditMode(false)}
+              >
+                cancel
+              </button>
+            )}
+            {editMode && (
+              <button
+                className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300"
+                onClick={() => setEditMode(false)}
+              >
+                save
+              </button>
             )}
             {!editMode && (
-              <button onClick={() => setStationData(null)}>close</button>
+              <button
+                className="p-2 rounded-xl border-2 border-slate-800 mb-8 hover:border-slate-900 transition-colors duration-300"
+                onClick={() => setStationData(null)}
+              >
+                close
+              </button>
             )}
           </div>
         </div>

@@ -13,7 +13,7 @@ const Map = ({ stations, location }) => {
 
   return (
     <ReactMapGL
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapStyle="mapbox://styles/mapbox/dark-v10"
       mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_KEY}
       onViewportChange={(updatedViewport) =>
         setViewport({ ...updatedViewport, width: "100%", height: "100%" })

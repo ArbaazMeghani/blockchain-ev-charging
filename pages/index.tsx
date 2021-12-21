@@ -27,7 +27,7 @@ export default function Home() {
   });
   const [stationData, setStationData] = useState({ station: stations[0] });
   return (
-    <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden">
+    <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
       <SideBar stations={stations} setLocation={setLocation} />
       <Map stations={stations} location={location} />
       <PlusButton setStationData={setStationData} />
