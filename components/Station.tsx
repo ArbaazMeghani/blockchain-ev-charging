@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CloseIcon from "../icons/CloseIcon";
 import StationIcon from "../icons/StationIcon";
 import Modal from "./Modal";
 
@@ -91,7 +90,7 @@ const Station = ({
           )}
           <div />
           <div className="flex flex-row justify-end items-center">
-            {owner && (
+            {owner && !edit && (
               <button
                 className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300 mr-4"
                 onClick={() => setEditMode(true)}
