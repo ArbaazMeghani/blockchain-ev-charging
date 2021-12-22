@@ -12,7 +12,7 @@ const Modal = ({ children, onClose }) => {
         >
           <CloseIcon />
         </button>
-        {...children}
+        {children}
       </div>
     </div>
   );
