@@ -1,4 +1,5 @@
 import { useState } from "react";
+import EditStation from "../components/EditStation";
 import Map from "../components/Map";
 import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
@@ -54,6 +55,7 @@ export default function Home() {
           onEdit={() => setEdit(true)}
         />
       )}
+      {open && edit && <EditStation />}
     </div>
   );
 }

@@ -15,7 +15,7 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
             <div className="mr-4">
               <StationIcon />
             </div>
-            <h1>{station.title}</h1>
+            {station.title}
           </h1>
           <div className="text-sm">
             <p>
