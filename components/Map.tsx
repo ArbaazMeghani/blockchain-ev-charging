@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ReactMapGL, { Marker } from "react-map-gl";
-import StationIcon from "../icons/StationIcon";
+import LocationMarker from "../icons/LocationMarker";
 
-const Map = ({ stations, location }) => {
+const Map = ({ stations, location, showStation }) => {
   const [viewport, setViewport] = useState({
     width: "100%",
     height: "100%",
@@ -25,8 +25,11 @@ const Map = ({ stations, location }) => {
           longitude={station.longitude}
           latitude={station.latitude}
           key={station.id}
+          onClick={() => showStation(station)}
         >
-          <StationIcon />
+          <div className="text-red-800 hover:cursor-pointer">
+            <LocationMarker />
+          </div>
         </Marker>
       ))}
     </ReactMapGL>
