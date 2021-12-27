@@ -13,7 +13,7 @@ const stations = [
     city: "city",
     state: "state",
     zipCode: "zip",
-    chargeRate: 1,
+    chargeRate: 200,
     price: 4.56,
     longitude: -93.625,
     latitude: 31.5868,

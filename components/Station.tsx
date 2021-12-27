@@ -25,62 +25,84 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
             </p>
           </div>
         </div>
-        <div>
-          <label htmlFor="ethereum">From</label>
-          <br />
-          <input
-            type="number"
-            required
-            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
-            id="ethereum"
-            placeholder="0.0"
-            onChange={(e) =>
-              setEnergy(e.target.value && e.target.value / station.price)
-            }
-            value={energy && energy * station.price}
-          />
-          <input
-            type="text"
-            className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
-            id="ethereum-symbol"
-            value={"ETH"}
-            disabled
-          />
+        <div className="flex flex-col items-center justify-center">
+          <div>
+            <label htmlFor="ethereum">From</label>
+            <br />
+            <input
+              type="number"
+              required
+              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
+              id="ethereum"
+              placeholder="0.0"
+              onChange={(e) =>
+                setEnergy(e.target.value && e.target.value / station.price)
+              }
+              value={energy && energy * station.price}
+            />
+            <input
+              type="text"
+              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
+              id="ethereum-symbol"
+              value={"ETH"}
+              disabled
+            />
+          </div>
           <div className="flex flex-row justify-center items-center mt-4 w-full">
             <div className="rounded-full p-2 border-2 border-gray-300 w-fit">
               <ChevronDownIcon />
             </div>
           </div>
-          <label htmlFor="kilowats">To</label>
-          <br />
-          <input
-            type="number"
-            required
-            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
-            id="kilowats"
-            placeholder="0.0"
-            onChange={(e) => setEnergy(e.target.value)}
-            value={energy}
-          />
-          <input
-            type="text"
-            className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
-            id="kilowats-symbol"
-            value={"kW"}
-            disabled
-          />
           <div>
-            <p>
-              5 * {station.price} = {5 * station.price}
-            </p>
-            <h3>
-              <b>charge time:</b> {station.chargeRate * 5}{" "}
-            </h3>
+            <label htmlFor="kilowats">To</label>
+            <br />
+            <input
+              type="number"
+              required
+              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
+              id="kilowats"
+              placeholder="0.0"
+              onChange={(e) => setEnergy(e.target.value)}
+              value={energy}
+            />
+            <input
+              type="text"
+              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
+              id="kilowats-symbol"
+              value={"kW"}
+              disabled
+            />
+            <br />
+            <input
+              type="number"
+              required
+              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none mt-2"
+              id="time"
+              placeholder="0.0"
+              onChange={(e) => setEnergy(e.target.value)}
+              value={energy && energy * station.chargeRate}
+            />
+            <input
+              type="text"
+              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
+              id="time-symbol"
+              value={"H"}
+              disabled
+            />
+          </div>
+          <div className="text-xs flex flex-col justify-end items-end w-full mr-2 mt-2">
+            <p>1 ETH = {1 / station.price} kW</p>
+            <p>1 kW = {station.chargeRate} H</p>
           </div>
           <button
             type="submit"
-            className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300 mr-4"
+            className={
+              (energy ? "hover:bg-violet-600" : "cursor-not-allowed") +
+              " p-2 rounded-xl bg-violet-700 mb-4 mt-4 transition-colors duration-300 mr-4 relative"
+            }
+            disabled={!energy}
           >
+            <div className="border-2 border-sky-400 rounded-full bg-sky-500 animate-pulse w-2 h-2 absolute top-0 right-0" />
             Start Charging
           </button>
         </div>
