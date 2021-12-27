@@ -30,11 +30,14 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
           <br />
           <input
             type="number"
-            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2"
+            required
+            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
             id="ethereum"
             placeholder="0.0"
-            onChange={(e) => console.log(e.target.value)}
-            value={energy}
+            onChange={(e) =>
+              setEnergy(e.target.value && e.target.value / station.price)
+            }
+            value={energy && energy * station.price}
           />
           <input
             type="text"
@@ -52,7 +55,8 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
           <br />
           <input
             type="number"
-            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2"
+            required
+            className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
             id="kilowats"
             placeholder="0.0"
             onChange={(e) => setEnergy(e.target.value)}
@@ -73,7 +77,10 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
               <b>charge time:</b> {station.chargeRate * 5}{" "}
             </h3>
           </div>
-          <button className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300 mr-4">
+          <button
+            type="submit"
+            className="p-2 rounded-xl bg-violet-700 mb-8 hover:bg-violet-800 transition-colors duration-300 mr-4"
+          >
             Start Charging
           </button>
         </div>
