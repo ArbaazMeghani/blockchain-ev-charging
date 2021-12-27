@@ -10,7 +10,7 @@ const SearchBar = ({ setLocation }) => {
         placeholder="Search..."
         onChange={(e) => onChangeText(e.target.value)}
         value={text}
-        className="border-2 border-gray-300 rounded-3xl focus:border-gray-500 p-2 w-72"
+        className="border-2 border-gray-300 rounded-3xl focus:border-gray-500 p-2 w-full"
       />
     </form>
   );
