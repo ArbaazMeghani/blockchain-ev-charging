@@ -26,6 +26,8 @@ const Map = ({ stations, location, showStation }) => {
           latitude={station.latitude}
           key={station.id}
           onClick={() => showStation(station)}
+          offsetLeft={-10}
+          offsetTop={-10}
         >
           <div className="text-red-800 hover:cursor-pointer">
             <LocationMarker />

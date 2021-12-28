@@ -1,8 +1,9 @@
 @tailwind components;
 @tailwind base;
 @tailwind utilities;
-
+@import "~mapbox-gl/dist/mapbox-gl.css";
 /* Chrome, Safari, Edge, Opera */
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

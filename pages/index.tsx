@@ -1,10 +1,15 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import EditStation from "../components/EditStation";
-import Map from "../components/Map";
 import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
 import Station from "../components/Station";
 import Wallet from "../components/Wallet";
+
+const Map = dynamic(() => import("../components/Map"), {
+  loading: () => <div>Loading...</div>,
+  ssr: false,
+});
 
 const stations = [
   {
