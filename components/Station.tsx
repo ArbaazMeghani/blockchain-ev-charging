@@ -2,11 +2,39 @@ import React, { useState } from "react";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import StationIcon from "../icons/StationIcon";
 import Modal from "./Modal";
+import NumberUnitInput from "./NumberUnitInput";
 import PrimaryButton from "./PrimaryButton";
 import SecondaryButton from "./SecondaryButton";
 
+const paymentOptions = [{ value: "ETH", factor: 1 }];
+const wattageOptions = [
+  { value: "W", factor: 1 },
+  { value: "kW", factor: 1000 },
+  { value: "mW", factor: 1000 * 1000 },
+];
+const timeUnitOptions = [
+  { value: "secs", factor: 1 },
+  { value: "mins", factor: 60 },
+  { value: "hrs", factor: 60 * 60 },
+];
+
 const Station = ({ station, owner = false, onClose, onEdit }) => {
   const [energy, setEnergy] = useState();
+  const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
+  const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
+
+  const setEnergyFromUnits = (amount) => {
+    setEnergy(amount * wattageOption.factor);
+  };
+
+  const setEnergyFromPayment = (payment) => {
+    setEnergy(payment && payment / station.price);
+  };
+
+  const setEnergyFromTimeAmount = (time) => {
+    setEnergy(time && (time * timeUnitOption.factor) / station.chargeRate);
+  };
+
   return (
     <Modal onClose={onClose}>
       <form className="flex flex-col justify-between items-center overflow-hidden w-full h-full relative">
@@ -26,73 +54,50 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <div>
-            <label htmlFor="ethereum">From</label>
-            <br />
-            <input
-              type="number"
-              required
-              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
-              id="ethereum"
-              placeholder="0.0"
-              onChange={(e) =>
-                setEnergy(e.target.value && e.target.value / station.price)
-              }
-              value={energy && energy * station.price}
-            />
-            <input
-              type="text"
-              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
-              id="ethereum-symbol"
-              value={"ETH"}
-              disabled
-            />
-          </div>
+          <NumberUnitInput
+            id="ethereum"
+            label="From"
+            value={(energy && energy * station.price) || ""}
+            onChangeValue={setEnergyFromPayment}
+            options={paymentOptions}
+          />
           <div className="flex flex-row justify-center items-center mt-4 w-full">
             <div className="rounded-full p-2 border-2 border-gray-300 w-fit">
               <ChevronDownIcon />
             </div>
           </div>
-          <div>
-            <label htmlFor="kilowats">To</label>
-            <br />
-            <input
-              type="number"
-              required
-              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
-              id="kilowats"
-              placeholder="0.0"
-              onChange={(e) => setEnergy(e.target.value)}
-              value={energy}
-            />
-            <input
-              type="text"
-              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
-              id="kilowats-symbol"
-              value={"kW"}
-              disabled
-            />
-            <br />
-            <input
-              type="number"
-              required
-              className="rounded-l-lg border-t-2 border-l-2 border-b-2 border-gray-300 bg-violet-600 text-white p-2 outline-none mt-2"
-              id="time"
-              placeholder="0.0"
-              onChange={(e) => setEnergy(e.target.value)}
-              value={energy && energy * station.chargeRate}
-            />
-            <input
-              type="text"
-              className="rounded-r-lg border-t-2 border-r-2 border-b-2 border-gray-300 bg-violet-500 text-white p-2 w-12"
-              id="time-symbol"
-              value={"H"}
-              disabled
-            />
-          </div>
+          <NumberUnitInput
+            id="watts"
+            label="To"
+            value={(energy && energy / wattageOption.factor) || ""}
+            onChangeValue={setEnergyFromUnits}
+            options={wattageOptions}
+            onChangeOption={setWattageOption}
+            selectedOption={wattageOption}
+          />
+          <NumberUnitInput
+            id="time"
+            value={
+              (energy &&
+                (energy * station.chargeRate) / timeUnitOption.factor) ||
+              ""
+            }
+            onChangeValue={setEnergyFromTimeAmount}
+            options={timeUnitOptions}
+            onChangeOption={setTimeUnitOption}
+            selectedOption={timeUnitOption}
+          />
           <div className="text-xs flex flex-col justify-end items-end w-full mr-2 mt-2">
-            <p>1 ETH = {1 / station.price} kW</p>
-            <p>1 kW = {station.chargeRate} H</p>
+            <p>
+              1 ETH = {1 / station.price / wattageOption.factor}{" "}
+              {wattageOption.value}
+            </p>
+            <p>
+              1 {wattageOption.value} ={" "}
+              {(station.chargeRate / timeUnitOption.factor) *
+                wattageOption.factor}{" "}
+              {timeUnitOption.value}
+            </p>
           </div>
           <button
             type="submit"
