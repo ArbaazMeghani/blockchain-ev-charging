@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
-import LocationMarker from "../icons/LocationMarker";
+import ReactMapGL from "react-map-gl";
 import MapMarker from "./MapMarker";
 
 const Map = ({

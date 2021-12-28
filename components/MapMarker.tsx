@@ -9,8 +9,6 @@ const MapMarker = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const hoveringClass = hovering ? "text-red-700" : "text-red-800";
-  console.log(hoveringClass);
   return (
     <Marker
       longitude={station.longitude}
@@ -22,7 +20,8 @@ const MapMarker = ({
     >
       <div
         className={
-          (hovering ? "text-red-700" : "text-red-800") + " hover:cursor-pointer"
+          (hovering ? "text-red-700" : "text-red-800") +
+          " hover:cursor-pointer transition-colors duration-200"
         }
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
