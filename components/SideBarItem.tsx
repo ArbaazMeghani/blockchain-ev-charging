@@ -1,9 +1,27 @@
 import React from "react";
 import StationIcon from "../icons/StationIcon";
 
-const SideBarItem = ({ item }) => {
+const SideBarItem = ({
+  item,
+  selected,
+  hovering,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
+  const hoveringClass = hovering ? "bg-purple-700" : "";
+  const selectedClass = selected ? "bg-purple-900" : "";
   return (
-    <div className="flex flex-row justify-evenly items-center border-b-2 border-gray-300 mt-4 mb-4">
+    <div
+      className={
+        hoveringClass +
+        selectedClass +
+        " flex flex-row justify-evenly items-center border-b-2 border-gray-300 w-full p-4"
+      }
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onClick={onClick}
+    >
       <StationIcon />
       <h3>{item.title}</h3>
       <div className="flex flex-col justify-start items-start">

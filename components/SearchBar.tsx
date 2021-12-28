@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const SearchBar = ({ setLocation }) => {
   const [text, onChangeText] = useState("");
   return (
-    <form onSubmit={() => setLocation(text)}>
+    <form onSubmit={() => setLocation(text)} className="w-full pl-8 pr-8">
       <input
         type="text"
         id="search"

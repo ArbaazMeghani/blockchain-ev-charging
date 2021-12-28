@@ -2,20 +2,30 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import SideBarItem from "./SideBarItem";
 
-type SideBarProps = {
-  stations: any;
-  setLocation: any;
-};
-
-const SideBar = ({ stations, setLocation }: SideBarProps) => {
+const SideBar = ({
+  stations,
+  setLocation,
+  selectedStation,
+  showStation,
+  hoveringStation,
+  onHoverStation,
+}) => {
   return (
     <div className="w-2/6 h-full overflow-y-auto">
       <div className="flex flex-col justify-center items-center mt-8 mb-8 w-full">
         <SearchBar setLocation={setLocation} />
       </div>
-      <div className="m-8">
+      <div className="w-full">
         {stations.map((station) => (
-          <SideBarItem item={station} key={station.id} />
+          <SideBarItem
+            item={station}
+            key={station.id}
+            selected={selectedStation && station.id === selectedStation.id}
+            hovering={hoveringStation && station.id === hoveringStation.id}
+            onClick={() => showStation(station)}
+            onMouseEnter={() => onHoverStation(station)}
+            onMouseLeave={() => onHoverStation(null)}
+          />
         ))}
       </div>
     </div>

@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import ReactMapGL, { Marker } from "react-map-gl";
 import LocationMarker from "../icons/LocationMarker";
+import MapMarker from "./MapMarker";
 
-const Map = ({ stations, location, showStation }) => {
+const Map = ({
+  stations,
+  location,
+  showStation,
+  hoveringStation,
+  onHoverStation,
+}) => {
   const [viewport, setViewport] = useState({
     width: "100%",
     height: "100%",
     latitude: location.latitude,
     longitude: location.longitude,
-    zoom: 13,
+    zoom: 0,
   });
 
   return (
@@ -21,18 +28,13 @@ const Map = ({ stations, location, showStation }) => {
       {...viewport}
     >
       {stations.map((station) => (
-        <Marker
-          longitude={station.longitude}
-          latitude={station.latitude}
-          key={station.id}
+        <MapMarker
+          station={station}
+          hovering={hoveringStation && station.id === hoveringStation.id}
           onClick={() => showStation(station)}
-          offsetLeft={-10}
-          offsetTop={-10}
-        >
-          <div className="text-red-800 hover:cursor-pointer">
-            <LocationMarker />
-          </div>
-        </Marker>
+          onMouseEnter={() => onHoverStation(station)}
+          onMouseLeave={() => onHoverStation(null)}
+        />
       ))}
     </ReactMapGL>
   );

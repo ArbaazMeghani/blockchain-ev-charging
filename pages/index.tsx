@@ -33,6 +33,7 @@ export default function Home() {
     latitude: 41.5868,
   });
   const [station, setStation] = useState(stations[0]);
+  const [hoveringStation, setHoveringStation] = useState(null);
   const [open, setOpen] = useState(true);
   const [edit, setEdit] = useState(false);
 
@@ -46,17 +47,35 @@ export default function Home() {
     setOpen(true);
   };
 
+  const onClose = () => {
+    setOpen(false);
+    setStation(null);
+  };
+
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-      <SideBar stations={stations} setLocation={setLocation} />
-      <Map stations={stations} location={location} showStation={showStation} />
+      <SideBar
+        stations={stations}
+        setLocation={setLocation}
+        selectedStation={station}
+        showStation={showStation}
+        hoveringStation={hoveringStation}
+        onHoverStation={setHoveringStation}
+      />
+      <Map
+        stations={stations}
+        location={location}
+        showStation={showStation}
+        hoveringStation={hoveringStation}
+        onHoverStation={setHoveringStation}
+      />
       <PlusButton onClick={createStation} />
       <Wallet />
       {open && !edit && (
         <Station
           station={station}
           owner={station.owner == "0x0"}
-          onClose={() => setOpen(false)}
+          onClose={onClose}
           onEdit={() => setEdit(true)}
         />
       )}
