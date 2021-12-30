@@ -45,13 +45,7 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
             </div>
             {station.title}
           </h1>
-          <div className="text-sm">
-            <p>
-              {station.streetAddress}
-              <br />
-              {station.city}, {station.state} {station.zipCode}
-            </p>
-          </div>
+          <div className="text-sm">{station.address}</div>
         </div>
         <div className="flex flex-col items-center justify-center">
           <NumberUnitInput

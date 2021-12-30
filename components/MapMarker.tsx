@@ -21,7 +21,7 @@ const MapMarker = ({
       <div
         className={
           (hovering ? "text-red-700" : "text-red-800") +
-          " hover:cursor-pointer transition-colors duration-200"
+          " hover:cursor-pointer transition-colors duration-300"
         }
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

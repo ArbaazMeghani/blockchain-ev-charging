@@ -15,10 +15,7 @@ const stations = [
   {
     id: 1,
     title: "1",
-    streetAddress: "123 w something st",
-    city: "city",
-    state: "state",
-    zipCode: "zip",
+    address: "123 w something st, city, state 1234, united states",
     chargeRate: 200,
     price: 4.56,
     longitude: -93.625,
