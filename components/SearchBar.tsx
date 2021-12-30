@@ -1,19 +1,40 @@
 import React, { useState } from "react";
+import { getMatchingAddresses } from "../api/mapbox-api";
 
 const SearchBar = ({ setLocation }) => {
   const [text, onChangeText] = useState("");
   const [focus, setFocus] = useState(false);
-  let searchResults = [
-    { address: "123 w something ave, City, State 1234, United States" },
-  ];
+  const [timerId, setTimerId] = useState(null);
+  const [searchResults, setSearchResults] = useState([
+    {
+      address: "123 w something ave, City, State 1234, United States",
+    },
+  ]);
 
   const updateText = (value) => {
     onChangeText(value);
+    if (timerId !== null) {
+      clearTimeout(timerId);
+      setTimerId(null);
+    }
+
+    if (value.length <= 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setSearchResults(await getMatchingAddresses(value));
+      setTimerId(null);
+    }, 500);
+
+    setTimerId(timer);
   };
 
   const selectAddress = (address) => {
     setLocation(address);
-    onChangeText(address);
+    onChangeText(address.address);
+    setFocus(false);
   };
 
   return (
