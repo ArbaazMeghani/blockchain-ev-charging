@@ -39,10 +39,12 @@ const SearchBar = ({ setLocation }) => {
 
   return (
     <>
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-transparent"
-        onClick={() => setFocus(false)}
-      />
+      {focus && (
+        <div
+          className="absolute top-0 left-0 w-full h-full bg-transparent"
+          onClick={() => setFocus(false)}
+        />
+      )}
       <div className="w-4/5 relative">
         <input
           autoComplete="off"
@@ -60,7 +62,7 @@ const SearchBar = ({ setLocation }) => {
           onClick={() => setFocus(true)}
         />
         {searchResults.length > 0 && focus && (
-          <div className="absolute bg-violet-500 w-full rounded-b-3xl">
+          <div className="absolute bg-violet-500 w-full rounded-b-3xl shadow-2xl shadow-black transition-all">
             <hr className="ml-8 mr-8 pt-2" />
             {searchResults.map((result) => (
               <div
