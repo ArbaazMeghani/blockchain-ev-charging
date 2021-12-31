@@ -14,7 +14,7 @@ const Map = ({
     height: "100%",
     latitude: location.latitude,
     longitude: location.longitude,
-    zoom: 0,
+    zoom: 1,
   });
 
   return (
@@ -25,6 +25,7 @@ const Map = ({
         setViewport({ ...updatedViewport, width: "100%", height: "100%" })
       }
       {...viewport}
+      minZoom={1}
     >
       {stations.map((station) => (
         <MapMarker

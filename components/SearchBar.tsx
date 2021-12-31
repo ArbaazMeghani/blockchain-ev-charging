@@ -5,11 +5,7 @@ const SearchBar = ({ setLocation }) => {
   const [text, onChangeText] = useState("");
   const [focus, setFocus] = useState(false);
   const [timerId, setTimerId] = useState(null);
-  const [searchResults, setSearchResults] = useState([
-    {
-      address: "123 w something ave, City, State 1234, United States",
-    },
-  ]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const updateText = (value) => {
     onChangeText(value);
@@ -41,7 +37,7 @@ const SearchBar = ({ setLocation }) => {
     <>
       {focus && (
         <div
-          className="absolute top-0 left-0 w-full h-full bg-transparent"
+          className="absolute top-0 left-0 w-full h-full bg-transparent z-10"
           onClick={() => setFocus(false)}
         />
       )}
