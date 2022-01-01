@@ -1,7 +1,5 @@
 import React from "react";
 import LocationMarker from "../icons/LocationMarker";
-import StationIcon from "../icons/StationIcon";
-import MapMarker from "./MapMarker";
 
 const SideBarItem = ({
   item,
