@@ -9,7 +9,7 @@ import SecondaryButton from "./SecondaryButton";
 const priceOptions = [{ value: "ETH" }];
 const chargeRateOptions = [{ value: "Ws" }];
 
-const EditStation = ({ currentStation = defaultStation, onClose }) => {
+const EditStation = ({ currentStation, onClose }) => {
   const [station, setStation] = useState(currentStation);
 
   const onChangeLocation = (location) => {

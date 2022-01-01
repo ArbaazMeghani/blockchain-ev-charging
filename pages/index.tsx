@@ -32,6 +32,17 @@ const stations = [
     latitude: 31.5868,
     owner: "0x0",
   },
+  {
+    id: 2,
+    title:
+      "1alskjfkshfjksdhfksjdhfsjdklhfsjdhfjklshdjfkjkashdjkshjkashdjkashdjkashdjkashdjkahdsjkahsjk kajshjdkhasjkd",
+    address: "123 w something st, city, state 1234, united states",
+    chargeRate: 200,
+    price: 4.56,
+    longitude: -93.625,
+    latitude: 31.5868,
+    owner: "0x0",
+  },
 ];
 
 export default function Home() {
