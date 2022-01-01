@@ -25,7 +25,7 @@ const NumberUnitInput = ({
         />
         <select
           size={1}
-          className="rounded-r-lg bg-violet-500 text-white p-2 h-10 w-20 outline-none"
+          className="rounded-r-lg bg-violet-500 text-white p-2 h-10 w-20 outline-none hover:cursor-pointer"
           value={
             (selectedOption && JSON.stringify(selectedOption)) ||
             JSON.stringify(options[0])

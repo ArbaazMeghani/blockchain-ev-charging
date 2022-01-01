@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { getMatchingAddresses } from "../api/mapbox-api";
 
-const SearchBar = ({ setLocation }) => {
-  const [text, onChangeText] = useState("");
+const SearchBar = ({ setLocation, searchText = "" }) => {
+  const [text, onChangeText] = useState(searchText);
   const [focus, setFocus] = useState(false);
   const [timerId, setTimerId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
@@ -33,15 +33,20 @@ const SearchBar = ({ setLocation }) => {
     setFocus(false);
   };
 
+  const unfocus = () => {
+    setFocus(false);
+    onChangeText(searchText);
+  };
+
   return (
     <>
       {focus && (
         <div
           className="absolute top-0 left-0 w-full h-full bg-transparent z-10"
-          onClick={() => setFocus(false)}
+          onClick={unfocus}
         />
       )}
-      <div className="w-4/5 relative">
+      <div className="w-4/5 relative z-20">
         <input
           autoComplete="off"
           type="text"
@@ -51,18 +56,18 @@ const SearchBar = ({ setLocation }) => {
           value={text}
           className={
             (searchResults.length > 0 && focus
-              ? "rounded-t-3xl"
-              : "rounded-3xl") +
-            " bg-violet-500 text-white pt-2 pb-2 pl-8 pr-8 outline-none w-full"
+              ? "rounded-t-3xl border-t-2 border-l-2 border-r-2"
+              : "rounded-3xl border-2") +
+            " bg-violet-600 text-white pt-2 pb-2 pl-8 pr-8 outline-none w-full border-gray-300"
           }
           onClick={() => setFocus(true)}
         />
         {searchResults.length > 0 && focus && (
-          <div className="absolute bg-violet-500 w-full rounded-b-3xl shadow-2xl shadow-black transition-all">
+          <div className="absolute bg-violet-600 w-full rounded-b-3xl shadow-2xl shadow-black transition-all border-gray-300 border-l-2 border-r-2 border-b-2">
             <hr className="ml-8 mr-8 pt-2" />
             {searchResults.map((result) => (
               <div
-                className="pt-2 pb-2 pl-8 pr-8 overflow-hidden overflow-ellipsis hover:cursor-pointer hover:bg-violet-400 text-white transition-colors duration-300"
+                className="pt-2 pb-2 pl-8 pr-8 overflow-hidden overflow-ellipsis hover:cursor-pointer hover:bg-violet-500 text-white transition-colors duration-300"
                 onClick={() => selectAddress(result)}
               >
                 {result.address}

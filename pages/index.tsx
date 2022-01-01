@@ -11,6 +11,16 @@ const Map = dynamic(() => import("../components/Map"), {
   ssr: false,
 });
 
+const defaultStation = {
+  title: null,
+  address: null,
+  price: null,
+  chargeRate: null,
+  longitude: null,
+  latitue: null,
+  owner: null,
+};
+
 const stations = [
   {
     id: 1,
@@ -37,6 +47,7 @@ export default function Home() {
   const createStation = () => {
     setEdit(true);
     setOpen(true);
+    setStation(defaultStation);
   };
 
   const showStation = (station) => {
@@ -46,6 +57,7 @@ export default function Home() {
 
   const onClose = () => {
     setOpen(false);
+    setEdit(false);
     setStation(null);
   };
 
@@ -76,7 +88,9 @@ export default function Home() {
           onEdit={() => setEdit(true)}
         />
       )}
-      {open && edit && <EditStation />}
+      {open && edit && (
+        <EditStation onClose={onClose} currentStation={station} />
+      )}
     </div>
   );
 }
