@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactMapGL from "react-map-gl";
 import MapMarker from "./MapMarker";
 
@@ -16,6 +16,15 @@ const Map = ({
     longitude: location.longitude,
     zoom: 1,
   });
+
+  useEffect(() => {
+    setViewport({
+      ...viewport,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      zoom: 13,
+    });
+  }, [location]);
 
   return (
     <ReactMapGL
