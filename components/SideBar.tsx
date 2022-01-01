@@ -15,6 +15,7 @@ const SideBar = ({
       <div className="flex flex-col justify-center items-center mt-8 mb-8 w-full">
         <SearchBar setLocation={setLocation} />
       </div>
+      <hr className="ml-8 mr-8 border-violet-600" />
       <div className="w-full">
         {stations.map((station) => (
           <SideBarItem
