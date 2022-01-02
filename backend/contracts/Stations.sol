@@ -16,11 +16,16 @@ contract Stations is ERC721, ERC721Burnable {
         uint256 latitude;
         uint256 price;
         uint256 chargeRate;
+        address owner;
     }
+    uint256 nextStationId = 1;
 
     mapping(uint256 => uint256) chargeEndTime;
     mapping(uint256 => Station) stations;
     mapping(uint256 => uint256) earnings;
+
+    uint256[] stationIds;
+    mapping(uint256 => uint256) stationIdToIndex;
 
     event StationCreated(uint256 stationId);
     event StationDeleted(uint256 stationId);
@@ -35,21 +40,45 @@ contract Stations is ERC721, ERC721Burnable {
     }
 
     modifier stationOwner(uint256 _stationId) {
-        require(msg.sender == ownerOf(_stationId));
+        require(
+            _isApprovedOrOwner(_msgSender(), _stationId),
+            "Caller is not owner nor approved"
+        );
         _;
     }
 
-    function createStation(Station memory _station) external {}
+    function createStation(Station memory _station) external {
+        uint256 stationId = nextStationId;
+        stationIds.push(stationId);
+        stationIdToIndex[stationId] = stationIds.length - 1;
 
-    function deleteStation(uint256 _stationId)
-        external
-        stationOwner(_stationId)
-    {}
+        _station.id = stationId;
+        _station.owner = msg.sender;
+
+        stations[stationId] = _station;
+
+        nextStationId++;
+        _safeMint(msg.sender, stationId);
+        emit StationCreated(stationId);
+    }
+
+    function deleteStation(uint256 _stationId) internal {
+        delete stations[_stationId];
+        uint256 stationIdIndex = stationIdToIndex[_stationId];
+        stationIds[stationIdIndex] = stationIds[stationIds.length - 1];
+        stationIdToIndex[stationIds[stationIds.length - 1]] = stationIdIndex;
+        stationIds.pop();
+        delete stationIdToIndex[_stationId];
+        emit StationDeleted(_stationId);
+    }
 
     function editStation(Station memory _station)
         external
         stationOwner(_station.id)
-    {}
+    {
+        stations[_station.id] = _station;
+        emit StationUpdated(_station.id);
+    }
 
     function chargeAtStation(uint256 _stationId) external payable {}
 
@@ -57,4 +86,22 @@ contract Stations is ERC721, ERC721Burnable {
         external
         stationOwner(_stationId)
     {}
+
+    function burn(uint256 tokenId) public override stationOwner(tokenId) {
+        //solhint-disable-next-line max-line-length
+        deleteStation(tokenId);
+        _burn(tokenId);
+    }
+
+    function getStationOwner(uint256 _stationId) public view returns (address) {
+        return stations[_stationId].owner;
+    }
+
+    function getAllStations() public view returns (Station[] memory) {
+        Station[] memory result = new Station[](stationIds.length);
+        for (uint256 i = 0; i < stationIds.length; i++) {
+            result[i] = stations[stationIds[i]];
+        }
+        return result;
+    }
 }
