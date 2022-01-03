@@ -80,21 +80,27 @@ contract Stations is ERC721, ERC721Burnable {
         emit StationUpdated(_station.id);
     }
 
-    function chargeAtStation(uint256 _stationId) external payable {}
+    function chargeAtStation(uint256 _stationId) external payable {
+        uint256 endTime = (msg.value / stations[_stationId].price) *
+            stations[_stationId].chargeRate +
+            block.timestamp;
+
+        chargeEndTime[_stationId] = endTime;
+        earnings[_stationId] += msg.value;
+        emit StationInUse(_stationId, endTime);
+    }
 
     function withdrawEarningsFromStation(uint256 _stationId)
         external
         stationOwner(_stationId)
-    {}
-
-    function burn(uint256 tokenId) public override stationOwner(tokenId) {
-        //solhint-disable-next-line max-line-length
-        deleteStation(tokenId);
-        _burn(tokenId);
+    {
+        payable(msg.sender).transfer(earnings[_stationId]);
+        earnings[_stationId] = 0;
     }
 
-    function getStationOwner(uint256 _stationId) public view returns (address) {
-        return stations[_stationId].owner;
+    function burn(uint256 tokenId) public override stationOwner(tokenId) {
+        deleteStation(tokenId);
+        _burn(tokenId);
     }
 
     function getAllStations() public view returns (Station[] memory) {
@@ -103,5 +109,13 @@ contract Stations is ERC721, ERC721Burnable {
             result[i] = stations[stationIds[i]];
         }
         return result;
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override {
+        stations[tokenId].owner = to;
     }
 }
