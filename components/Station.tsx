@@ -49,7 +49,7 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
         </div>
         <div className="flex flex-col items-center justify-center">
           <NumberUnitInput
-            id="ethereum"
+            id="ethereum-amount"
             label="From"
             value={(energy && energy * station.price) || ""}
             onChangeValue={setEnergyFromPayment}

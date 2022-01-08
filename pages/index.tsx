@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import EditStation from "../components/EditStation";
 import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
 import Station from "../components/Station";
 import Wallet from "../components/Wallet";
+import useWallet from "../hooks/useWallet";
+import useContract from "../hooks/useContract";
+import contract from "../public/contracts/stations-contract.json";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -21,39 +24,31 @@ const defaultStation = {
   owner: null,
 };
 
-const stations = [
-  {
-    id: 1,
-    title: "1",
-    address: "123 w something st, city, state 1234, united states",
-    chargeRate: 200,
-    price: 4.56,
-    longitude: -93.625,
-    latitude: 31.5868,
-    owner: "0x0",
-  },
-  {
-    id: 2,
-    title:
-      "1alskjfkshfjksdhfksjdhfsjdklhfsjdhfjklshdjfkjkashdjkshjkashdjkashdjkashdjkashdjkahdsjkahsjk kajshjdkhasjkd",
-    address: "123 w something st, city, state 1234, united states",
-    chargeRate: 200,
-    price: 4.56,
-    longitude: -93.625,
-    latitude: 31.5868,
-    owner: "0x0",
-  },
-];
-
 export default function Home() {
+  const wallet = useWallet();
+  const stationsContract = useContract(contract, wallet.signer);
+
   const [location, setLocation] = useState({
     longitude: -93.625,
     latitude: 41.5868,
   });
-  const [station, setStation] = useState(stations[0]);
+  const [stations, setStations] = useState([]);
+  const [station, setStation] = useState(null);
   const [hoveringStation, setHoveringStation] = useState(null);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    const getStations = async () => {
+      const stationData = await stationsContract.getAllStations();
+      console.log(stationData);
+      setStations(stationData);
+    };
+
+    if (stationsContract && stationsContract.signer) {
+      getStations();
+    }
+  }, [stationsContract]);
 
   const createStation = () => {
     setEdit(true);

@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import fs from "fs";
+import { FormatTypes } from "ethers/lib/utils";
 
 async function main() {
   const MyContract = await ethers.getContractFactory("Stations");
@@ -8,9 +9,10 @@ async function main() {
   await contract.deployed();
 
   console.log("Stations deployed to:", contract.address);
+  const abi = contract.interface.format(FormatTypes.full);
   const deployment = {
     address: contract.address,
-    abi: contract.interface,
+    abi,
   };
   fs.writeFileSync(
     `${process.env.DEPLOYMENT_LOCATION}/${contract.address}.json`,
