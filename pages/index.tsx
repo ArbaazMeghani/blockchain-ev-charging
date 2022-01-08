@@ -8,7 +8,7 @@ import Wallet from "../components/Wallet";
 import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
-import { ethers, FixedNumber } from "ethers";
+import { ethers } from "ethers";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -31,8 +31,8 @@ export default function Home() {
   const stationsContract = useContract(contract, wallet.signer);
 
   const [location, setLocation] = useState({
-    longitude: -93.625,
-    latitude: 41.5868,
+    longitude: -87.6244,
+    latitude: 41.8765,
   });
   const [stations, setStations] = useState([]);
   const [station, setStation] = useState(null);
@@ -56,12 +56,24 @@ export default function Home() {
       setStations(stations);
     };
 
-    if (stationsContract && stationsContract.signer) {
+    if (
+      stationsContract &&
+      stationsContract.signer &&
+      wallet.network.chainId ===
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID
+    ) {
       getStations();
     }
   }, [stationsContract]);
 
   const createStation = () => {
+    if (
+      !wallet.signer ||
+      wallet.network.chainId !==
+        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID
+    ) {
+      return;
+    }
     setEdit(true);
     setOpen(true);
     setStation(defaultStation);
@@ -119,7 +131,7 @@ export default function Home() {
       {open && !edit && (
         <Station
           station={station}
-          owner={station.owner == "0x0"}
+          owner={wallet.address && station.owner == wallet.address}
           onClose={onClose}
           onEdit={() => setEdit(true)}
         />
