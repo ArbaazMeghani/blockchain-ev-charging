@@ -1,5 +1,5 @@
 {
-  "address": "0x5CE3e6452b8d6bFfc26a12B31eFBcF7c7EFBF620",
+  "address": "0x88D7A4639D5Ff312bb7d2f540297b9C9c5C87CFB",
   "abi": [
     "constructor()",
     "event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)",
@@ -13,9 +13,9 @@
     "function balanceOf(address owner) view returns (uint256)",
     "function burn(uint256 tokenId)",
     "function chargeAtStation(uint256 _stationId) payable",
-    "function createStation(tuple(uint256 id, string title, string stationAddress, uint256 longitude, uint256 latitude, uint256 price, uint256 chargeRate, address owner) _station)",
-    "function editStation(tuple(uint256 id, string title, string stationAddress, uint256 longitude, uint256 latitude, uint256 price, uint256 chargeRate, address owner) _station)",
-    "function getAllStations() view returns (tuple(uint256 id, string title, string stationAddress, uint256 longitude, uint256 latitude, uint256 price, uint256 chargeRate, address owner)[])",
+    "function createStation(tuple(uint256 id, string title, string stationAddress, int256 longitude, int256 latitude, uint256 price, uint256 chargeRate, address owner) _station)",
+    "function editStation(tuple(uint256 id, string title, string stationAddress, int256 longitude, int256 latitude, uint256 price, uint256 chargeRate, address owner) _station)",
+    "function getAllStations() view returns (tuple(uint256 id, string title, string stationAddress, int256 longitude, int256 latitude, uint256 price, uint256 chargeRate, address owner)[])",
     "function getApproved(uint256 tokenId) view returns (address)",
     "function isApprovedForAll(address owner, address operator) view returns (bool)",
     "function name() view returns (string)",

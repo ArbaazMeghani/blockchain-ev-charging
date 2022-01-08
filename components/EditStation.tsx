@@ -9,7 +9,7 @@ import SecondaryButton from "./SecondaryButton";
 const priceOptions = [{ value: "ETH" }];
 const chargeRateOptions = [{ value: "Ws" }];
 
-const EditStation = ({ currentStation, onClose }) => {
+const EditStation = ({ currentStation, onClose, onSave }) => {
   const [station, setStation] = useState(currentStation);
 
   const onChangeLocation = (location) => {
@@ -22,10 +22,16 @@ const EditStation = ({ currentStation, onClose }) => {
   const onChangePrice = (price) => {
     setStation({ ...station, price });
   };
+  const onChangeTitle = (title) => {
+    setStation({ ...station, title });
+  };
 
   return (
     <Modal onClose={onClose}>
-      <form className="overflow-hidden w-full h-full">
+      <form
+        className="overflow-hidden w-full h-full"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <div className="flex flex-col justify-between items-start h-full w-full">
           <div className="border-b-2 w-full flex flex-col items-center justify-center pb-4">
             <h1 className="text-4xl inline-flex items-center mt-4 justify-center">
@@ -45,14 +51,15 @@ const EditStation = ({ currentStation, onClose }) => {
                 className="rounded-lg border-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
                 placeholder="title"
                 required
-                value={station.title}
+                value={station.title || ""}
+                onChange={(e) => onChangeTitle(e.target.value)}
               />
             </div>
             <div className="w-full flex flex-col justify-center items-center">
               <label htmlFor="search">Address</label>
               <SearchBar
                 setLocation={onChangeLocation}
-                searchText={station.address}
+                searchText={station.address || ""}
               />
             </div>
             <div className="flex flex-row w-full justify-evenly items-center">
@@ -66,7 +73,7 @@ const EditStation = ({ currentStation, onClose }) => {
                   placeholder="longitude"
                   required
                   disabled
-                  value={station.longitude}
+                  value={station.longitude || ""}
                 />
               </div>
               <div>
@@ -79,7 +86,7 @@ const EditStation = ({ currentStation, onClose }) => {
                   placeholder="latitude"
                   required
                   disabled
-                  value={station.latitude}
+                  value={station.latitude || ""}
                 />
               </div>
             </div>
@@ -87,13 +94,13 @@ const EditStation = ({ currentStation, onClose }) => {
               id="price"
               label="Price"
               options={priceOptions}
-              value={station.price}
+              value={station.price || ""}
               onChangeValue={onChangePrice}
             />
             <NumberUnitInput
               id="charge-rate"
               label="Charge Rate"
-              value={station.chargeRate}
+              value={station.chargeRate || ""}
               onChangeValue={onChangeChargeRate}
               options={chargeRateOptions}
             />
@@ -101,7 +108,7 @@ const EditStation = ({ currentStation, onClose }) => {
 
           <div className="w-full border-b-2 border-gray-300 mb-4" />
           <div className="flex flex-row justify-end items-end w-full">
-            <PrimaryButton onClick={() => console.log("save")} value="save" />
+            <PrimaryButton onClick={() => onSave(station)} value="save" />
             <SecondaryButton onClick={onClose} value="cancel" />
           </div>
         </div>

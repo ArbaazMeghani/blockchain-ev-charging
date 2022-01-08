@@ -38,6 +38,7 @@ const Map = ({
     >
       {stations.map((station) => (
         <MapMarker
+          key={station.id}
           station={station}
           hovering={hoveringStation && station.id === hoveringStation.id}
           onClick={() => showStation(station)}

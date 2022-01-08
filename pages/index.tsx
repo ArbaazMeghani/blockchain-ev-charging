@@ -8,6 +8,7 @@ import Wallet from "../components/Wallet";
 import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
+import { ethers, FixedNumber } from "ethers";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -15,12 +16,13 @@ const Map = dynamic(() => import("../components/Map"), {
 });
 
 const defaultStation = {
+  id: 0,
   title: null,
   address: null,
+  longitude: null,
+  latitude: null,
   price: null,
   chargeRate: null,
-  longitude: null,
-  latitue: null,
   owner: null,
 };
 
@@ -41,8 +43,17 @@ export default function Home() {
   useEffect(() => {
     const getStations = async () => {
       const stationData = await stationsContract.getAllStations();
-      console.log(stationData);
-      setStations(stationData);
+      const stations = stationData.map((station) => ({
+        id: station.id.toNumber(),
+        title: station.title,
+        address: station.stationAddress,
+        longitude: Number(ethers.utils.formatEther(station.longitude)),
+        latitude: Number(ethers.utils.formatEther(station.latitude)),
+        price: Number(ethers.utils.formatEther(station.price)),
+        chargeRate: Number(ethers.utils.formatEther(station.chargeRate)),
+        owner: station.owner,
+      }));
+      setStations(stations);
     };
 
     if (stationsContract && stationsContract.signer) {
@@ -54,6 +65,25 @@ export default function Home() {
     setEdit(true);
     setOpen(true);
     setStation(defaultStation);
+  };
+
+  const onSaveStation = async (station) => {
+    console.log(station);
+    if (station.id === 0) {
+      station.owner = wallet.address;
+      await stationsContract.createStation([
+        station.id,
+        station.title,
+        station.address,
+        ethers.utils.parseEther(station.longitude.toString()),
+        ethers.utils.parseEther(station.latitude.toString()),
+        ethers.utils.parseEther(station.price.toString()),
+        ethers.utils.parseEther(station.chargeRate.toString()),
+        station.owner,
+      ]);
+    } else {
+      await stationsContract.updateStation(station);
+    }
   };
 
   const showStation = (station) => {
@@ -95,7 +125,11 @@ export default function Home() {
         />
       )}
       {open && edit && (
-        <EditStation onClose={onClose} currentStation={station} />
+        <EditStation
+          onClose={onClose}
+          currentStation={station}
+          onSave={onSaveStation}
+        />
       )}
     </div>
   );

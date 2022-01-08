@@ -12,8 +12,8 @@ contract Stations is ERC721, ERC721Burnable {
         uint256 id;
         string title;
         string stationAddress;
-        uint256 longitude;
-        uint256 latitude;
+        int256 longitude;
+        int256 latitude;
         uint256 price;
         uint256 chargeRate;
         address owner;
