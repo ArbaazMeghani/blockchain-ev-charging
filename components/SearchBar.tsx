@@ -54,13 +54,14 @@ const SearchBar = ({ setLocation, searchText = "" }) => {
           placeholder="Search..."
           onChange={(e) => updateText(e.target.value)}
           value={text}
+          required
           className={
             (searchResults.length > 0 && focus
               ? "rounded-t-3xl border-t-2 border-l-2 border-r-2"
               : "rounded-3xl border-2") +
             " bg-violet-600 text-white pt-2 pb-2 pl-8 pr-8 outline-none w-full border-gray-300"
           }
-          onClick={() => setFocus(true)}
+          onFocus={() => setFocus(true)}
         />
         {searchResults.length > 0 && focus && (
           <div className="absolute bg-violet-600 w-full rounded-b-3xl shadow-2xl shadow-black transition-all border-gray-300 border-l-2 border-r-2 border-b-2">

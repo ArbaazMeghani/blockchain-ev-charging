@@ -59,15 +59,14 @@ export default function Home() {
     if (
       stationsContract &&
       stationsContract.signer &&
-      wallet.network &&
-      wallet.network.chainId === chainId
+      wallet.chainId === chainId
     ) {
       getStations();
     }
-  }, [stationsContract, wallet.network]);
+  }, [stationsContract, wallet.chainId]);
 
   const createStation = () => {
-    if (!wallet.signer || wallet.network.chainId !== chainId) {
+    if (wallet.chainId !== chainId) {
       return;
     }
     setEdit(true);
@@ -86,14 +85,26 @@ export default function Home() {
       ethers.utils.parseEther(station.chargeRate.toString()),
       wallet.address,
     ];
+    await wallet.signer.un;
     if (station.id === 0) {
       await stationsContract.createStation(stationTuple);
     } else {
       await stationsContract.editStation(stationTuple);
     }
+
+    setEdit(false);
+    setOpen(false);
+  };
+
+  const onDeleteStation = async (station) => {
+    await stationsContract.burn(station.id);
+    setOpen(false);
   };
 
   const showStation = (station) => {
+    if (wallet.chainId !== chainId) {
+      return;
+    }
     setStation(station);
     setOpen(true);
   };
@@ -129,6 +140,7 @@ export default function Home() {
           owner={wallet.address && station.owner == wallet.address}
           onClose={onClose}
           onEdit={() => setEdit(true)}
+          onDelete={() => onDeleteStation(station)}
         />
       )}
       {open && edit && (

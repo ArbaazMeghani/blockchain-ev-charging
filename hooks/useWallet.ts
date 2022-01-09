@@ -5,19 +5,19 @@ const useWallet = () => {
   const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
-  const [network, setNetwork] = useState(null);
+  const [chainId, setChainId] = useState(null);
   useEffect(() => {
     const getWallet = async () => {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner(accounts[0]);
-        const network = await provider.getNetwork();
+        const chainId = await signer.getChainId();
 
         setProvider(provider);
         setAddress(await signer.getAddress());
         setSigner(signer);
-        setNetwork(network);
+        setChainId(chainId);
       } catch (error) {
         console.error(error);
       }
@@ -30,7 +30,7 @@ const useWallet = () => {
           setProvider(null);
           setAddress(null);
           setSigner(null);
-          setNetwork(null);
+          setChainId(null);
           return;
         }
         getWallet();
@@ -44,7 +44,7 @@ const useWallet = () => {
     address,
     provider,
     signer,
-    network,
+    chainId,
   };
 };
 

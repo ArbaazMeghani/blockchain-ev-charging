@@ -18,7 +18,7 @@ const timeUnitOptions = [
   { value: "hrs", factor: 60 * 60 },
 ];
 
-const Station = ({ station, owner = false, onClose, onEdit }) => {
+const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
   const [energy, setEnergy] = useState();
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
@@ -108,7 +108,11 @@ const Station = ({ station, owner = false, onClose, onEdit }) => {
         <div className="w-full border-b-2 border-gray-300" />
         <div className="flex flex-row justify-between items-center w-full">
           {owner && (
-            <button className="p-2 rounded-xl bg-red-800 mb-8 hover:bg-red-900 transition-colors duration-300 ml-4">
+            <button
+              className="p-2 rounded-xl bg-red-800 mb-8 hover:bg-red-900 transition-colors duration-300 ml-4"
+              onClick={onDelete}
+              type="button"
+            >
               delete
             </button>
           )}

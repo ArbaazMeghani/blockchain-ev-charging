@@ -30,7 +30,10 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
     <Modal onClose={onClose}>
       <form
         className="overflow-hidden w-full h-full"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSave(station);
+        }}
       >
         <div className="flex flex-col justify-between items-start h-full w-full">
           <div className="border-b-2 w-full flex flex-col items-center justify-center pb-4">
@@ -108,7 +111,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
 
           <div className="w-full border-b-2 border-gray-300 mb-4" />
           <div className="flex flex-row justify-end items-end w-full">
-            <PrimaryButton onClick={() => onSave(station)} value="save" />
+            <PrimaryButton value="save" />
             <SecondaryButton onClick={onClose} value="cancel" />
           </div>
         </div>
