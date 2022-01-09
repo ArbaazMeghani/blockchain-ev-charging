@@ -76,20 +76,20 @@ export default function Home() {
   };
 
   const onSaveStation = async (station) => {
+    const stationTuple = [
+      station.id,
+      station.title,
+      station.address,
+      ethers.utils.parseEther(station.longitude.toString()),
+      ethers.utils.parseEther(station.latitude.toString()),
+      ethers.utils.parseEther(station.price.toString()),
+      ethers.utils.parseEther(station.chargeRate.toString()),
+      wallet.address,
+    ];
     if (station.id === 0) {
-      station.owner = wallet.address;
-      await stationsContract.createStation([
-        station.id,
-        station.title,
-        station.address,
-        ethers.utils.parseEther(station.longitude.toString()),
-        ethers.utils.parseEther(station.latitude.toString()),
-        ethers.utils.parseEther(station.price.toString()),
-        ethers.utils.parseEther(station.chargeRate.toString()),
-        station.owner,
-      ]);
+      await stationsContract.createStation(stationTuple);
     } else {
-      await stationsContract.updateStation(station);
+      await stationsContract.editStation(stationTuple);
     }
   };
 
