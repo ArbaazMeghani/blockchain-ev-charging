@@ -17,12 +17,12 @@ const Map = dynamic(() => import("../components/Map"), {
 
 const defaultStation = {
   id: 0,
-  title: null,
-  address: null,
-  longitude: null,
-  latitude: null,
-  price: null,
-  chargeRate: null,
+  title: "",
+  address: "",
+  longitude: "",
+  latitude: "",
+  price: "",
+  chargeRate: "",
   owner: null,
 };
 
@@ -141,6 +141,7 @@ export default function Home() {
           onClose={onClose}
           onEdit={() => setEdit(true)}
           onDelete={() => onDeleteStation(station)}
+          stationsContract={stationsContract}
         />
       )}
       {open && edit && (

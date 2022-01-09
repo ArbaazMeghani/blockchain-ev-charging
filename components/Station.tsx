@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ethers } from "../backend/node_modules/ethers/lib";
+import useContract from "../hooks/useContract";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import StationIcon from "../icons/StationIcon";
 import Modal from "./Modal";
@@ -18,8 +20,15 @@ const timeUnitOptions = [
   { value: "hrs", factor: 60 * 60 },
 ];
 
-const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
-  const [energy, setEnergy] = useState();
+const Station = ({
+  station,
+  owner = false,
+  onClose,
+  onEdit,
+  onDelete,
+  stationsContract,
+}) => {
+  const [energy, setEnergy] = useState("");
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
 
@@ -28,6 +37,10 @@ const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
   };
 
   const setEnergyFromPayment = (payment) => {
+    if (payment == 0) {
+      setEnergy(payment);
+      return;
+    }
     setEnergy(payment && payment / station.price);
   };
 
@@ -35,9 +48,25 @@ const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
     setEnergy(time && (time * timeUnitOption.factor) / station.chargeRate);
   };
 
+  const onCharge = async () => {
+    if (energy) {
+      const price = energy / station.price;
+      const ethersAmount = ethers.utils.parseEther(price.toString());
+      await stationsContract.chargeAtStation(station.id, {
+        value: ethersAmount,
+      });
+    }
+  };
+
   return (
     <Modal onClose={onClose}>
-      <form className="flex flex-col justify-between items-center overflow-hidden w-full h-full relative">
+      <form
+        className="flex flex-col justify-between items-center overflow-hidden w-full h-full relative"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onCharge();
+        }}
+      >
         <div className="border-b-2 w-full flex flex-col items-center justify-center pb-4">
           <h1 className="text-4xl inline-flex items-center mt-4 justify-center">
             <div className="mr-4">
@@ -51,7 +80,7 @@ const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
           <NumberUnitInput
             id="ethereum-amount"
             label="From"
-            value={(energy && energy * station.price) || ""}
+            value={energy && energy * station.price}
             onChangeValue={setEnergyFromPayment}
             options={paymentOptions}
           />
@@ -63,7 +92,7 @@ const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
           <NumberUnitInput
             id="watts"
             label="To"
-            value={(energy && energy / wattageOption.factor) || ""}
+            value={energy && energy / wattageOption.factor}
             onChangeValue={setEnergyFromUnits}
             options={wattageOptions}
             onChangeOption={setWattageOption}
@@ -72,9 +101,7 @@ const Station = ({ station, owner = false, onClose, onEdit, onDelete }) => {
           <NumberUnitInput
             id="time"
             value={
-              (energy &&
-                (energy * station.chargeRate) / timeUnitOption.factor) ||
-              ""
+              energy && (energy * station.chargeRate) / timeUnitOption.factor
             }
             onChangeValue={setEnergyFromTimeAmount}
             options={timeUnitOptions}

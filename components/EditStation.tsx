@@ -54,7 +54,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
                 className="rounded-lg border-2 border-gray-300 bg-violet-600 text-white p-2 outline-none"
                 placeholder="title"
                 required
-                value={station.title || ""}
+                value={station.title}
                 onChange={(e) => onChangeTitle(e.target.value)}
               />
             </div>
@@ -62,7 +62,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
               <label htmlFor="search">Address</label>
               <SearchBar
                 setLocation={onChangeLocation}
-                searchText={station.address || ""}
+                searchText={station.address}
               />
             </div>
             <div className="flex flex-row w-full justify-evenly items-center">
@@ -76,7 +76,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
                   placeholder="longitude"
                   required
                   disabled
-                  value={station.longitude || ""}
+                  value={station.longitude}
                 />
               </div>
               <div>
@@ -89,7 +89,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
                   placeholder="latitude"
                   required
                   disabled
-                  value={station.latitude || ""}
+                  value={station.latitude}
                 />
               </div>
             </div>
@@ -97,13 +97,13 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
               id="price"
               label="Price"
               options={priceOptions}
-              value={station.price || ""}
+              value={station.price}
               onChangeValue={onChangePrice}
             />
             <NumberUnitInput
               id="charge-rate"
               label="Charge Rate"
-              value={station.chargeRate || ""}
+              value={station.chargeRate}
               onChangeValue={onChangeChargeRate}
               options={chargeRateOptions}
             />
