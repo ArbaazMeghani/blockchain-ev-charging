@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "../backend/node_modules/ethers/lib";
-import useContract from "../hooks/useContract";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import StationIcon from "../icons/StationIcon";
 import Modal from "./Modal";
@@ -27,10 +26,12 @@ const Station = ({
   onEdit,
   onDelete,
   stationsContract,
+  getBalance,
 }) => {
   const [energy, setEnergy] = useState("");
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
+  const [sufficientBalance, setSufficientBalance] = useState(true);
 
   const setEnergyFromUnits = (amount) => {
     setEnergy(amount * wattageOption.factor);
@@ -47,14 +48,30 @@ const Station = ({
   const setEnergyFromTimeAmount = (time) => {
     setEnergy(time && (time * timeUnitOption.factor) / station.chargeRate);
   };
+  useEffect(() => {
+    const isSufficientBalance = async () => {
+      const balance = await getBalance();
+      const total = energy / station.price;
+      const sufficient = balance >= total;
+      setSufficientBalance(sufficient);
+    };
+
+    if (energy) {
+      isSufficientBalance();
+    }
+  }, [energy]);
 
   const onCharge = async () => {
-    if (energy) {
-      const price = energy / station.price;
-      const ethersAmount = ethers.utils.parseEther(price.toString());
-      await stationsContract.chargeAtStation(station.id, {
-        value: ethersAmount,
-      });
+    try {
+      if (energy) {
+        const price = energy / station.price;
+        const ethersAmount = ethers.utils.parseEther(price.toString());
+        await stationsContract.chargeAtStation(station.id, {
+          value: ethersAmount,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -84,6 +101,11 @@ const Station = ({
             onChangeValue={setEnergyFromPayment}
             options={paymentOptions}
           />
+          {!sufficientBalance && (
+            <div className="text-xs flex flex-col justify-end items-end w-full mr-2 mt-2 text-red-700">
+              Insufficient balance
+            </div>
+          )}
           <div className="flex flex-row justify-center items-center mt-4 w-full">
             <div className="rounded-full p-2 border-2 border-gray-300 w-fit">
               <ChevronDownIcon />
@@ -123,10 +145,12 @@ const Station = ({
           <button
             type="submit"
             className={
-              (energy ? "hover:bg-violet-600" : "cursor-not-allowed") +
+              (energy && sufficientBalance
+                ? "hover:bg-violet-600"
+                : "cursor-not-allowed") +
               " p-2 rounded-xl bg-violet-700 mb-4 mt-4 transition-colors duration-300 mr-4 relative"
             }
-            disabled={!energy}
+            disabled={!energy || !sufficientBalance}
           >
             <div className="border-2 border-sky-400 rounded-full bg-sky-500 animate-pulse w-2 h-2 absolute top-0 right-0" />
             Start Charging

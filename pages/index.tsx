@@ -74,6 +74,15 @@ export default function Home() {
     setStation(defaultStation);
   };
 
+  const getBalance = async () => {
+    if (!wallet.signer) {
+      return 0;
+    }
+
+    const balance = await wallet.signer.getBalance();
+    return Number(ethers.utils.formatEther(balance));
+  };
+
   const onSaveStation = async (station) => {
     const stationTuple = [
       station.id,
@@ -142,6 +151,7 @@ export default function Home() {
           onEdit={() => setEdit(true)}
           onDelete={() => onDeleteStation(station)}
           stationsContract={stationsContract}
+          getBalance={getBalance}
         />
       )}
       {open && edit && (
