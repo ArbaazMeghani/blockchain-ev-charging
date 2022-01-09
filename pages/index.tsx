@@ -29,6 +29,7 @@ const defaultStation = {
 export default function Home() {
   const wallet = useWallet();
   const stationsContract = useContract(contract, wallet.signer);
+  const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
 
   const [location, setLocation] = useState({
     longitude: -87.6244,
@@ -55,23 +56,18 @@ export default function Home() {
       }));
       setStations(stations);
     };
-
     if (
       stationsContract &&
       stationsContract.signer &&
-      wallet.network.chainId ===
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID
+      wallet.network &&
+      wallet.network.chainId === chainId
     ) {
       getStations();
     }
-  }, [stationsContract]);
+  }, [stationsContract, wallet.network]);
 
   const createStation = () => {
-    if (
-      !wallet.signer ||
-      wallet.network.chainId !==
-        process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID
-    ) {
+    if (!wallet.signer || wallet.network.chainId !== chainId) {
       return;
     }
     setEdit(true);
@@ -80,7 +76,6 @@ export default function Home() {
   };
 
   const onSaveStation = async (station) => {
-    console.log(station);
     if (station.id === 0) {
       station.owner = wallet.address;
       await stationsContract.createStation([
