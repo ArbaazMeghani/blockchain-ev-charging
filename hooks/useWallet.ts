@@ -23,8 +23,6 @@ const useWallet = () => {
       }
     };
     if (window.ethereum) {
-      console.log(window.ethereum);
-      console.log(window.ethereum.isConnected());
       getWallet();
 
       window.ethereum.on("accountsChanged", async (accounts) => {
