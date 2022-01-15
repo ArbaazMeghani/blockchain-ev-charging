@@ -35,6 +35,11 @@ const Map = ({
       }
       {...viewport}
       minZoom={1}
+      ref={(map) => {
+        if (map) {
+          console.log(map.getMap().getBounds());
+        }
+      }}
     >
       {stations.map((station) => (
         <MapMarker
