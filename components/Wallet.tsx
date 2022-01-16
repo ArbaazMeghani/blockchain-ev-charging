@@ -7,7 +7,7 @@ const Wallet = () => {
   if (!wallet.address) {
     return (
       <button
-        className="mr-12 mt-12 absolute top-0 right-0 bg-violet-800 p-2 rounded-2xl z-0 shadow-xl"
+        className="bg-violet-800 p-2 rounded-2xl z-0 shadow-xl"
         onClick={() => {
           window.location.reload();
         }}

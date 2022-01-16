@@ -1,4 +1,4 @@
-import { createRef, forwardRef, useEffect, useRef, useState } from "react";
+import { createRef, forwardRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import EditStation from "../components/EditStation";
 import PlusButton from "../components/PlusButton";
@@ -8,8 +8,10 @@ import Wallet from "../components/Wallet";
 import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
+import SearchBar from "../components/SearchBar";
 import { ethers } from "ethers";
 import { MapRef } from "react-map-gl";
+import MenuIcon from "../icons/MenuIcon";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -129,44 +131,85 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-      <SideBar
-        stations={stations}
-        setLocation={setLocation}
-        selectedStation={station}
-        showStation={showStation}
-        hoveringStation={hoveringStation}
-        onHoverStation={setHoveringStation}
-        mapRef={mapRef}
-      />
-      <ForwardedRefMap
-        stations={stations}
-        location={location}
-        showStation={showStation}
-        hoveringStation={hoveringStation}
-        onHoverStation={setHoveringStation}
-        ref={mapRef}
-      />
-      <PlusButton onClick={createStation} />
-      <Wallet />
-      {open && !edit && (
-        <Station
-          station={station}
-          owner={wallet.address && station.owner == wallet.address}
-          onClose={onClose}
-          onEdit={() => setEdit(true)}
-          onDelete={() => onDeleteStation(station)}
-          stationsContract={stationsContract}
-          getBalance={getBalance}
+    <>
+      <div className="hidden md:flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
+        <SideBar
+          stations={stations}
+          setLocation={setLocation}
+          selectedStation={station}
+          showStation={showStation}
+          hoveringStation={hoveringStation}
+          onHoverStation={setHoveringStation}
+          mapRef={mapRef}
         />
-      )}
-      {open && edit && (
-        <EditStation
-          onClose={onClose}
-          currentStation={station}
-          onSave={onSaveStation}
+        <ForwardedRefMap
+          stations={stations}
+          location={location}
+          showStation={showStation}
+          hoveringStation={hoveringStation}
+          onHoverStation={setHoveringStation}
+          ref={mapRef}
         />
-      )}
-    </div>
+        <PlusButton onClick={createStation} />
+        <div className="absolute top-0 right-0">
+          <Wallet />
+        </div>
+        {open && !edit && (
+          <Station
+            station={station}
+            owner={wallet.address && station.owner == wallet.address}
+            onClose={onClose}
+            onEdit={() => setEdit(true)}
+            onDelete={() => onDeleteStation(station)}
+            stationsContract={stationsContract}
+            getBalance={getBalance}
+          />
+        )}
+        {open && edit && (
+          <EditStation
+            onClose={onClose}
+            currentStation={station}
+            onSave={onSaveStation}
+          />
+        )}
+      </div>
+      <div className="md:hidden h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
+        <div className="absolute top-0 w-full mt-4 z-20">
+          <div className="flex flex-row justify-center items-center">
+            <MenuIcon />
+            <SearchBar setLocation={setLocation} />
+            <Wallet />
+          </div>
+        </div>
+
+        <ForwardedRefMap
+          stations={stations}
+          location={location}
+          showStation={showStation}
+          hoveringStation={hoveringStation}
+          onHoverStation={setHoveringStation}
+          ref={mapRef}
+        />
+        <PlusButton onClick={createStation} />
+        {open && !edit && (
+          <Station
+            station={station}
+            owner={wallet.address && station.owner == wallet.address}
+            onClose={onClose}
+            onEdit={() => setEdit(true)}
+            onDelete={() => onDeleteStation(station)}
+            stationsContract={stationsContract}
+            getBalance={getBalance}
+          />
+        )}
+        {open && edit && (
+          <EditStation
+            onClose={onClose}
+            currentStation={station}
+            onSave={onSaveStation}
+          />
+        )}
+      </div>
+    </>
   );
 }

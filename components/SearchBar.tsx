@@ -46,7 +46,7 @@ const SearchBar = ({ setLocation, searchText = "" }) => {
           onClick={unfocus}
         />
       )}
-      <div className="w-4/5 relative z-20">
+      <div className="w-4/5 relative z-20 bg-inherit">
         <input
           autoComplete="off"
           type="text"
@@ -68,6 +68,7 @@ const SearchBar = ({ setLocation, searchText = "" }) => {
             <hr className="ml-8 mr-8 pt-2" />
             {searchResults.map((result) => (
               <div
+                key={result.address}
                 className="pt-2 pb-2 pl-8 pr-8 overflow-hidden overflow-ellipsis hover:cursor-pointer hover:bg-violet-500 text-white transition-colors duration-300"
                 onClick={() => selectAddress(result)}
               >
