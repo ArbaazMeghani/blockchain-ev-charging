@@ -131,85 +131,53 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div className="hidden md:flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-        <SideBar
-          stations={stations}
-          setLocation={setLocation}
-          selectedStation={station}
-          showStation={showStation}
-          hoveringStation={hoveringStation}
-          onHoverStation={setHoveringStation}
-          mapRef={mapRef}
-        />
-        <ForwardedRefMap
-          stations={stations}
-          location={location}
-          showStation={showStation}
-          hoveringStation={hoveringStation}
-          onHoverStation={setHoveringStation}
-          ref={mapRef}
-        />
-        <PlusButton onClick={createStation} />
-        <div className="absolute top-0 right-0">
+    <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
+      <div className="absolute top-0 w-full mt-4 z-20 md:hidden">
+        <div className="flex flex-row justify-center items-center">
+          <MenuIcon />
+          <SearchBar setLocation={setLocation} />
           <Wallet />
         </div>
-        {open && !edit && (
-          <Station
-            station={station}
-            owner={wallet.address && station.owner == wallet.address}
-            onClose={onClose}
-            onEdit={() => setEdit(true)}
-            onDelete={() => onDeleteStation(station)}
-            stationsContract={stationsContract}
-            getBalance={getBalance}
-          />
-        )}
-        {open && edit && (
-          <EditStation
-            onClose={onClose}
-            currentStation={station}
-            onSave={onSaveStation}
-          />
-        )}
       </div>
-      <div className="md:hidden h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-        <div className="absolute top-0 w-full mt-4 z-20">
-          <div className="flex flex-row justify-center items-center">
-            <MenuIcon />
-            <SearchBar setLocation={setLocation} />
-            <Wallet />
-          </div>
-        </div>
-
-        <ForwardedRefMap
-          stations={stations}
-          location={location}
-          showStation={showStation}
-          hoveringStation={hoveringStation}
-          onHoverStation={setHoveringStation}
-          ref={mapRef}
+      <SideBar
+        stations={stations}
+        setLocation={setLocation}
+        selectedStation={station}
+        showStation={showStation}
+        hoveringStation={hoveringStation}
+        onHoverStation={setHoveringStation}
+        mapRef={mapRef}
+      />
+      <ForwardedRefMap
+        stations={stations}
+        location={location}
+        showStation={showStation}
+        hoveringStation={hoveringStation}
+        onHoverStation={setHoveringStation}
+        ref={mapRef}
+      />
+      <PlusButton onClick={createStation} />
+      <div className="hidden md:block absolute top-0 right-0">
+        <Wallet />
+      </div>
+      {open && !edit && (
+        <Station
+          station={station}
+          owner={wallet.address && station.owner == wallet.address}
+          onClose={onClose}
+          onEdit={() => setEdit(true)}
+          onDelete={() => onDeleteStation(station)}
+          stationsContract={stationsContract}
+          getBalance={getBalance}
         />
-        <PlusButton onClick={createStation} />
-        {open && !edit && (
-          <Station
-            station={station}
-            owner={wallet.address && station.owner == wallet.address}
-            onClose={onClose}
-            onEdit={() => setEdit(true)}
-            onDelete={() => onDeleteStation(station)}
-            stationsContract={stationsContract}
-            getBalance={getBalance}
-          />
-        )}
-        {open && edit && (
-          <EditStation
-            onClose={onClose}
-            currentStation={station}
-            onSave={onSaveStation}
-          />
-        )}
-      </div>
-    </>
+      )}
+      {open && edit && (
+        <EditStation
+          onClose={onClose}
+          currentStation={station}
+          onSave={onSaveStation}
+        />
+      )}
+    </div>
   );
 }
