@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CloseIcon from "../icons/CloseIcon";
 import SearchBar from "./SearchBar";
 import SideBarItem from "./SideBarItem";
+import Wallet from "./Wallet";
 
 const SideBar = ({
   stations,
@@ -57,6 +58,9 @@ const SideBar = ({
         </button>
         <div className="flex flex-col justify-center items-center mt-8 mb-8 w-full">
           <SearchBar setLocation={setLocation} />
+        </div>
+        <div className="md:hidden flex flex-col justify-center items-center w-full mb-4">
+          <Wallet />
         </div>
         <hr className="ml-8 mr-8 border-violet-600" />
         <div className="w-full">
