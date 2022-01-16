@@ -12,6 +12,7 @@ import SearchBar from "../components/SearchBar";
 import { ethers } from "ethers";
 import { MapRef } from "react-map-gl";
 import MenuIcon from "../icons/MenuIcon";
+import useWindowSize from "../hooks/useWindowSize";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -33,6 +34,7 @@ const defaultStation = {
 };
 
 export default function Home() {
+  const windowSize = useWindowSize();
   const wallet = useWallet();
   const stationsContract = useContract(contract, wallet.signer);
   const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
@@ -45,7 +47,14 @@ export default function Home() {
   const [hoveringStation, setHoveringStation] = useState(null);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const mapRef = createRef<MapRef>();
+
+  useEffect(() => {
+    if (windowSize[0] > 768) {
+      setSidebarOpen(true);
+    }
+  }, [windowSize]);
 
   useEffect(() => {
     const getStations = async () => {
@@ -132,11 +141,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-      <div className="absolute top-0 w-full mt-4 z-20 md:hidden">
-        <div className="flex flex-row justify-center items-center">
-          <MenuIcon />
+      <div className="absolute top-0 w-full mt-4 z-10 md:hidden">
+        <div className="flex flex-row justify-evenly items-center">
+          <button
+            className="text-violet-600"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <MenuIcon />
+          </button>
           <SearchBar setLocation={setLocation} />
-          <Wallet />
         </div>
       </div>
       <SideBar
@@ -146,6 +159,8 @@ export default function Home() {
         showStation={showStation}
         hoveringStation={hoveringStation}
         onHoverStation={setHoveringStation}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
         mapRef={mapRef}
       />
       <ForwardedRefMap
@@ -157,7 +172,7 @@ export default function Home() {
         ref={mapRef}
       />
       <PlusButton onClick={createStation} />
-      <div className="hidden md:block absolute top-0 right-0">
+      <div className="hidden md:block absolute top-0 right-0 mr-12 mt-12">
         <Wallet />
       </div>
       {open && !edit && (
