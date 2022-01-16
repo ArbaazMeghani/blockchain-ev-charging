@@ -8,6 +8,7 @@ const Map = ({
   showStation,
   hoveringStation,
   onHoverStation,
+  mapRef,
 }) => {
   const [viewport, setViewport] = useState({
     width: "100%",
@@ -35,11 +36,7 @@ const Map = ({
       }
       {...viewport}
       minZoom={1}
-      ref={(map) => {
-        if (map) {
-          console.log(map.getMap().getBounds());
-        }
-      }}
+      ref={mapRef}
     >
       {stations.map((station) => (
         <MapMarker

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createRef, forwardRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import EditStation from "../components/EditStation";
 import PlusButton from "../components/PlusButton";
@@ -9,11 +9,15 @@ import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
 import { ethers } from "ethers";
+import { MapRef } from "react-map-gl";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
   ssr: false,
 });
+const ForwardedRefMap = forwardRef((props, ref) => (
+  <Map {...props} mapRef={ref} />
+));
 
 const defaultStation = {
   id: 0,
@@ -30,7 +34,6 @@ export default function Home() {
   const wallet = useWallet();
   const stationsContract = useContract(contract, wallet.signer);
   const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
-
   const [location, setLocation] = useState({
     longitude: -87.6244,
     latitude: 41.8765,
@@ -40,6 +43,7 @@ export default function Home() {
   const [hoveringStation, setHoveringStation] = useState(null);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+  const mapRef = createRef<MapRef>();
 
   useEffect(() => {
     const getStations = async () => {
@@ -133,13 +137,15 @@ export default function Home() {
         showStation={showStation}
         hoveringStation={hoveringStation}
         onHoverStation={setHoveringStation}
+        mapRef={mapRef}
       />
-      <Map
+      <ForwardedRefMap
         stations={stations}
         location={location}
         showStation={showStation}
         hoveringStation={hoveringStation}
         onHoverStation={setHoveringStation}
+        ref={mapRef}
       />
       <PlusButton onClick={createStation} />
       <Wallet />
