@@ -1,5 +1,4 @@
-import dynamic from "next/dynamic";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactMapGL from "react-map-gl";
 import MapMarker from "./MapMarker";
 
