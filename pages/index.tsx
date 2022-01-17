@@ -8,7 +8,6 @@ import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
 import { MapRef } from "react-map-gl";
-import useProvider from "../hooks/useProvider";
 import useStations from "../hooks/useStations";
 import stationUtils from "../utils";
 import Map from "../components/Map";
@@ -30,9 +29,8 @@ const defaultLocation = {
 };
 
 export default function Home() {
-  const provider = useProvider();
   const wallet = useWallet();
-  const stationsContract = useContract(contract, provider);
+  const stationsContract = useContract(contract);
   const stations = useStations(stationsContract);
   const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
   const [location, setLocation] = useState(defaultLocation);

@@ -1,7 +1,9 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import useProvider from "./useProvider";
 
-const useContract = (contract, provider) => {
+const useContract = (contract) => {
+  const provider = useProvider();
   const [instance, setInstance] = useState(null);
   useEffect(() => {
     const getInstance = async () => {
