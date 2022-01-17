@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 import { MapRef } from "react-map-gl";
 import MenuIcon from "../icons/MenuIcon";
 import useWindowSize from "../hooks/useWindowSize";
+import useProvider from "../hooks/useProvider";
 
 const Map = dynamic(() => import("../components/Map"), {
   loading: () => <div>Loading...</div>,
@@ -34,9 +35,10 @@ const defaultStation = {
 };
 
 export default function Home() {
+  const provider = useProvider();
   const windowSize = useWindowSize();
   const wallet = useWallet();
-  const stationsContract = useContract(contract, wallet.signer);
+  const stationsContract = useContract(contract, provider);
   const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
   const [location, setLocation] = useState({
     longitude: -87.6244,
@@ -71,14 +73,10 @@ export default function Home() {
       }));
       setStations(stations);
     };
-    if (
-      stationsContract &&
-      stationsContract.signer &&
-      wallet.chainId === chainId
-    ) {
+    if (stationsContract) {
       getStations();
     }
-  }, [stationsContract, wallet.chainId]);
+  }, [stationsContract]);
 
   const createStation = () => {
     if (wallet.chainId !== chainId) {
@@ -109,11 +107,11 @@ export default function Home() {
       ethers.utils.parseEther(station.chargeRate.toString()),
       wallet.address,
     ];
-    await wallet.signer.un;
+    const contractWithSigner = stationsContract.connect(wallet.signer);
     if (station.id === 0) {
-      await stationsContract.createStation(stationTuple);
+      await contractWithSigner.createStation(stationTuple);
     } else {
-      await stationsContract.editStation(stationTuple);
+      await contractWithSigner.editStation(stationTuple);
     }
 
     setEdit(false);
@@ -121,7 +119,8 @@ export default function Home() {
   };
 
   const onDeleteStation = async (station) => {
-    await stationsContract.burn(station.id);
+    const contractWithSigner = stationsContract.connect(wallet.signer);
+    await contractWithSigner.burn(station.id);
     setOpen(false);
   };
 

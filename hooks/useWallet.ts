@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 const useWallet = () => {
   const [address, setAddress] = useState(null);
-  const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [chainId, setChainId] = useState(null);
   useEffect(() => {
@@ -14,7 +13,6 @@ const useWallet = () => {
         const signer = provider.getSigner(accounts[0]);
         const chainId = await signer.getChainId();
 
-        setProvider(provider);
         setAddress(await signer.getAddress());
         setSigner(signer);
         setChainId(chainId);
@@ -27,7 +25,6 @@ const useWallet = () => {
 
       window.ethereum.on("accountsChanged", async (accounts) => {
         if (!accounts) {
-          setProvider(null);
           setAddress(null);
           setSigner(null);
           setChainId(null);
@@ -38,11 +35,16 @@ const useWallet = () => {
 
       window.ethereum.on("chainChanged", () => window.location.reload());
     }
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeAllListeners();
+      }
+    };
   }, []);
 
   return {
     address,
-    provider,
     signer,
     chainId,
   };

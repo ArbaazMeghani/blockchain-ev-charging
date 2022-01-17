@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "../backend/node_modules/ethers/lib";
+import useWallet from "../hooks/useWallet";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import StationIcon from "../icons/StationIcon";
 import Modal from "./Modal";
@@ -28,6 +29,7 @@ const Station = ({
   stationsContract,
   getBalance,
 }) => {
+  const wallet = useWallet();
   const [energy, setEnergy] = useState("");
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
@@ -64,9 +66,10 @@ const Station = ({
   const onCharge = async () => {
     try {
       if (energy) {
+        const contractWithSigner = stationsContract.connect(wallet.signer);
         const price = energy / station.price;
         const ethersAmount = ethers.utils.parseEther(price.toString());
-        await stationsContract.chargeAtStation(station.id, {
+        await contractWithSigner.chargeAtStation(station.id, {
           value: ethersAmount,
         });
       }
