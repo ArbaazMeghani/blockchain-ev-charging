@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import useWindowSize from "../hooks/useWindowSize";
 import CloseIcon from "../icons/CloseIcon";
+import MenuIcon from "../icons/MenuIcon";
 import SearchBar from "./SearchBar";
 import SideBarItem from "./SideBarItem";
 import Wallet from "./Wallet";
@@ -11,14 +13,14 @@ const SideBar = ({
   showStation,
   hoveringStation,
   onHoverStation,
-  open,
-  onClose,
   mapRef,
 }) => {
+  const windowSize = useWindowSize();
   const [neLng, setNeLng] = useState(0);
   const [neLat, setNeLat] = useState(0);
   const [swLng, setSwLng] = useState(0);
   const [swLat, setSwLat] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
 
   const inBounds = (station) => {
@@ -30,6 +32,12 @@ const SideBar = ({
       longitude <= neLng
     );
   };
+
+  useEffect(() => {
+    if (windowSize[0] > 768) {
+      setSidebarOpen(true);
+    }
+  }, [windowSize]);
 
   useEffect(() => {
     if (intervalId) {
@@ -47,12 +55,28 @@ const SideBar = ({
     setIntervalId(newInterval);
   }, [mapRef]);
 
+  if (!sidebarOpen) {
+    return (
+      <div className="absolute top-0 w-full mt-4 z-10 md:hidden">
+        <div className="flex flex-row justify-evenly items-center">
+          <button
+            className="text-violet-600"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <MenuIcon />
+          </button>
+          <SearchBar setLocation={setLocation} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    open && (
+    sidebarOpen && (
       <div className="absolute w-full top-0 left-0 z-10 md:relative md:w-2/5 lg:w-2/6 h-full bg-gradient-to-b from-violet-800 to-indigo-900 overflow-y-auto transition-all duration-300">
         <button
           className="absolute top-0 right-0 z-10 mt-4 mr-4 md:hidden"
-          onClick={onClose}
+          onClick={() => setSidebarOpen(false)}
         >
           <CloseIcon />
         </button>

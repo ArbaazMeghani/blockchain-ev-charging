@@ -30,7 +30,7 @@ contract Stations is ERC721, ERC721Burnable {
     event StationCreated(uint256 stationId);
     event StationDeleted(uint256 stationId);
     event StationUpdated(uint256 stationId);
-    event StationInUse(uint256 stationId, uint256 endTime);
+    event StationInUse(uint256 stationId, uint256 duration);
 
     constructor()
         public
@@ -81,13 +81,12 @@ contract Stations is ERC721, ERC721Burnable {
     }
 
     function chargeAtStation(uint256 _stationId) external payable {
-        uint256 endTime = (msg.value / stations[_stationId].price) *
-            stations[_stationId].chargeRate +
-            block.timestamp;
+        uint256 duration = (msg.value / stations[_stationId].price) *
+            stations[_stationId].chargeRate;
 
         chargeEndTime[_stationId] = endTime;
         earnings[_stationId] += msg.value;
-        emit StationInUse(_stationId, endTime);
+        emit StationInUse(_stationId, duration);
     }
 
     function withdrawEarningsFromStation(uint256 _stationId)
@@ -109,6 +108,14 @@ contract Stations is ERC721, ERC721Burnable {
             result[i] = stations[stationIds[i]];
         }
         return result;
+    }
+
+    function getStation(uint256 _stationId)
+        public
+        view
+        returns (Station memory)
+    {
+        return stations[_stationId];
     }
 
     function _beforeTokenTransfer(

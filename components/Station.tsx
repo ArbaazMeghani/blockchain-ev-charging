@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import NumberUnitInput from "./NumberUnitInput";
 import PrimaryButton from "./PrimaryButton";
 import SecondaryButton from "./SecondaryButton";
+import stationUtils from "../utils";
 
 const paymentOptions = [{ value: "ETH", factor: 1 }];
 const wattageOptions = [
@@ -27,7 +28,6 @@ const Station = ({
   onEdit,
   onDelete,
   stationsContract,
-  getBalance,
 }) => {
   const wallet = useWallet();
   const [energy, setEnergy] = useState("");
@@ -52,7 +52,7 @@ const Station = ({
   };
   useEffect(() => {
     const isSufficientBalance = async () => {
-      const balance = await getBalance();
+      const balance = await stationUtils.getBalance(wallet.signer);
       const total = energy / station.price;
       const sufficient = balance >= total;
       setSufficientBalance(sufficient);

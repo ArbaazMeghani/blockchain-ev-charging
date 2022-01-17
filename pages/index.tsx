@@ -1,5 +1,4 @@
-import { createRef, forwardRef, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { createRef, useState } from "react";
 import EditStation from "../components/EditStation";
 import PlusButton from "../components/PlusButton";
 import SideBar from "../components/SideBar";
@@ -8,20 +7,11 @@ import Wallet from "../components/Wallet";
 import useWallet from "../hooks/useWallet";
 import useContract from "../hooks/useContract";
 import contract from "../public/contracts/stations-contract.json";
-import SearchBar from "../components/SearchBar";
-import { ethers } from "ethers";
 import { MapRef } from "react-map-gl";
-import MenuIcon from "../icons/MenuIcon";
-import useWindowSize from "../hooks/useWindowSize";
 import useProvider from "../hooks/useProvider";
-
-const Map = dynamic(() => import("../components/Map"), {
-  loading: () => <div>Loading...</div>,
-  ssr: false,
-});
-const ForwardedRefMap = forwardRef((props, ref) => (
-  <Map {...props} mapRef={ref} />
-));
+import useStations from "../hooks/useStations";
+import stationUtils from "../utils";
+import Map from "../components/Map";
 
 const defaultStation = {
   id: 0,
@@ -34,49 +24,23 @@ const defaultStation = {
   owner: null,
 };
 
+const defaultLocation = {
+  longitude: -87.6244,
+  latitude: 41.8765,
+};
+
 export default function Home() {
   const provider = useProvider();
-  const windowSize = useWindowSize();
   const wallet = useWallet();
   const stationsContract = useContract(contract, provider);
+  const stations = useStations(stationsContract);
   const chainId = parseInt(process.env.NEXT_PUBLIC_ETHEREUM_NETWORK_CHAIN_ID);
-  const [location, setLocation] = useState({
-    longitude: -87.6244,
-    latitude: 41.8765,
-  });
-  const [stations, setStations] = useState([]);
+  const [location, setLocation] = useState(defaultLocation);
   const [station, setStation] = useState(null);
   const [hoveringStation, setHoveringStation] = useState(null);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const mapRef = createRef<MapRef>();
-
-  useEffect(() => {
-    if (windowSize[0] > 768) {
-      setSidebarOpen(true);
-    }
-  }, [windowSize]);
-
-  useEffect(() => {
-    const getStations = async () => {
-      const stationData = await stationsContract.getAllStations();
-      const stations = stationData.map((station) => ({
-        id: station.id.toNumber(),
-        title: station.title,
-        address: station.stationAddress,
-        longitude: Number(ethers.utils.formatEther(station.longitude)),
-        latitude: Number(ethers.utils.formatEther(station.latitude)),
-        price: Number(ethers.utils.formatEther(station.price)),
-        chargeRate: Number(ethers.utils.formatEther(station.chargeRate)),
-        owner: station.owner,
-      }));
-      setStations(stations);
-    };
-    if (stationsContract) {
-      getStations();
-    }
-  }, [stationsContract]);
 
   const createStation = () => {
     if (wallet.chainId !== chainId) {
@@ -87,33 +51,8 @@ export default function Home() {
     setStation(defaultStation);
   };
 
-  const getBalance = async () => {
-    if (!wallet.signer) {
-      return 0;
-    }
-
-    const balance = await wallet.signer.getBalance();
-    return Number(ethers.utils.formatEther(balance));
-  };
-
   const onSaveStation = async (station) => {
-    const stationTuple = [
-      station.id,
-      station.title,
-      station.address,
-      ethers.utils.parseEther(station.longitude.toString()),
-      ethers.utils.parseEther(station.latitude.toString()),
-      ethers.utils.parseEther(station.price.toString()),
-      ethers.utils.parseEther(station.chargeRate.toString()),
-      wallet.address,
-    ];
-    const contractWithSigner = stationsContract.connect(wallet.signer);
-    if (station.id === 0) {
-      await contractWithSigner.createStation(stationTuple);
-    } else {
-      await contractWithSigner.editStation(stationTuple);
-    }
-
+    await stationUtils.saveStation(station, wallet, stationsContract);
     setEdit(false);
     setOpen(false);
   };
@@ -140,17 +79,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
-      <div className="absolute top-0 w-full mt-4 z-10 md:hidden">
-        <div className="flex flex-row justify-evenly items-center">
-          <button
-            className="text-violet-600"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <MenuIcon />
-          </button>
-          <SearchBar setLocation={setLocation} />
-        </div>
-      </div>
       <SideBar
         stations={stations}
         setLocation={setLocation}
@@ -158,11 +86,9 @@ export default function Home() {
         showStation={showStation}
         hoveringStation={hoveringStation}
         onHoverStation={setHoveringStation}
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
         mapRef={mapRef}
       />
-      <ForwardedRefMap
+      <Map
         stations={stations}
         location={location}
         showStation={showStation}
@@ -182,7 +108,6 @@ export default function Home() {
           onEdit={() => setEdit(true)}
           onDelete={() => onDeleteStation(station)}
           stationsContract={stationsContract}
-          getBalance={getBalance}
         />
       )}
       {open && edit && (
