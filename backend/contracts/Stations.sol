@@ -20,7 +20,6 @@ contract Stations is ERC721, ERC721Burnable {
     }
     uint256 nextStationId = 1;
 
-    mapping(uint256 => uint256) chargeEndTime;
     mapping(uint256 => Station) stations;
     mapping(uint256 => uint256) earnings;
 
@@ -30,7 +29,7 @@ contract Stations is ERC721, ERC721Burnable {
     event StationCreated(uint256 stationId);
     event StationDeleted(uint256 stationId);
     event StationUpdated(uint256 stationId);
-    event StationInUse(uint256 stationId, uint256 duration);
+    event StationInUse(uint256 indexed stationId, uint256 indexed duration);
 
     constructor()
         public
@@ -84,7 +83,6 @@ contract Stations is ERC721, ERC721Burnable {
         uint256 duration = (msg.value / stations[_stationId].price) *
             stations[_stationId].chargeRate;
 
-        chargeEndTime[_stationId] = endTime;
         earnings[_stationId] += msg.value;
         emit StationInUse(_stationId, duration);
     }
