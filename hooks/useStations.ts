@@ -15,7 +15,6 @@ const useStations = (contract) => {
     const getStations = async () => {
       const stations = await contract.getAllStations();
       setStations(stations.map(stationUtils.parseStation));
-      console.log("test");
     };
 
     if (contract) {
