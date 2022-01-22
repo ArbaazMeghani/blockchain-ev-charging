@@ -53,6 +53,8 @@ export default function Home() {
     await stationUtils.saveStation(station, wallet, stationsContract);
     setEdit(false);
     setOpen(false);
+    setHoveringStation(null);
+    setStation(null);
   };
 
   const onDeleteStation = async (station) => {

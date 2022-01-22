@@ -34,9 +34,10 @@ const Station = ({
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
   const [sufficientBalance, setSufficientBalance] = useState(true);
+  const [charging, setCharging] = useState(false);
 
   const setEnergyFromUnits = (amount) => {
-    setEnergy(amount * wattageOption.factor);
+    setEnergy(amount && amount * wattageOption.factor);
   };
 
   const setEnergyFromPayment = (payment) => {
@@ -50,10 +51,20 @@ const Station = ({
   const setEnergyFromTimeAmount = (time) => {
     setEnergy(time && (time * timeUnitOption.factor) / station.chargeRate);
   };
+
+  useEffect(() => {
+    window.addEventListener("ChargeComplete", (event) => {
+      const stationId = event.detail;
+      if (stationId === station.id) {
+        setCharging(false);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     const isSufficientBalance = async () => {
       const balance = await stationUtils.getBalance(wallet.signer);
-      const total = energy / station.price;
+      const total = energy * station.price;
       const sufficient = balance >= total;
       setSufficientBalance(sufficient);
     };
@@ -66,14 +77,16 @@ const Station = ({
   const onCharge = async () => {
     try {
       if (energy) {
+        setCharging(true);
         const contractWithSigner = stationsContract.connect(wallet.signer);
-        const price = energy / station.price;
+        const price = energy * station.price;
         const ethersAmount = ethers.utils.parseEther(price.toString());
         await contractWithSigner.chargeAtStation(station.id, {
           value: ethersAmount,
         });
       }
     } catch (error) {
+      setCharging(false);
       console.log(error);
     }
   };
@@ -145,19 +158,38 @@ const Station = ({
               {timeUnitOption.value}
             </p>
           </div>
-          <button
-            type="submit"
-            className={
-              (energy && sufficientBalance
-                ? "hover:bg-violet-600"
-                : "cursor-not-allowed") +
-              " p-2 rounded-xl bg-violet-700 mb-4 mt-4 transition-colors duration-300 mr-4 relative"
-            }
-            disabled={!energy || !sufficientBalance}
-          >
-            <div className="border-2 border-sky-400 rounded-full bg-sky-500 animate-pulse w-2 h-2 absolute top-0 right-0" />
-            Start Charging
-          </button>
+          {!charging &&
+            (!station.inUseUntil || station.inUseUntil < Date.now()) && (
+              <button
+                type="submit"
+                className={
+                  (energy && sufficientBalance
+                    ? "hover:bg-violet-600"
+                    : "cursor-not-allowed") +
+                  " p-2 rounded-xl bg-violet-700 mb-4 mt-4 transition-colors duration-300 mr-4 relative"
+                }
+                disabled={!energy || !sufficientBalance}
+              >
+                <div className="border-2 border-sky-400 rounded-full bg-sky-500 animate-pulse w-2 h-2 absolute top-0 right-0" />
+                Start Charging
+              </button>
+            )}
+          {(charging ||
+            (station.inUseUntil && station.inUseUntil >= Date.now())) && (
+            <button
+              type="submit"
+              className="cursor-not-allowed p-2 rounded-xl bg-orange-800 mb-4 mt-4 transition-colors duration-300 mr-4 relative"
+              disabled={true}
+            >
+              <div className="inline-flex items-center justify-center">
+                <div className="h-5 w-5 mr-2 animate-spin border-4 border-slate-300 border-r-white rounded-full" />
+                {(station.inUseUntil &&
+                  "Charging until " +
+                    new Date(station.inUseUntil).toLocaleString()) ||
+                  "Processing..."}
+              </div>
+            </button>
+          )}
         </div>
         <div className="w-full border-b-2 border-gray-300" />
         <div className="flex flex-row justify-between items-center w-full">

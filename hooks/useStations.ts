@@ -47,13 +47,27 @@ const useStations = (contract) => {
 
       contract.on("StationInUse", (stationId, duration) => {
         const seconds = Number(ethers.utils.formatEther(duration));
-        const updatedStations = stationsRef.current.map((station) => {
-          if (station.id === stationId.toNumber()) {
-            station.inUseUntil = Date.now() + seconds * 1000;
-          }
-          return station;
+
+        const setInUseUntil = (stationId, inUseUntil) => {
+          const updatedStations = stationsRef.current.map((station) => {
+            if (station.id === stationId.toNumber()) {
+              station.inUseUntil = inUseUntil;
+            }
+            return station;
+          });
+          setStations(updatedStations);
+        };
+
+        const customEvent = new CustomEvent("ChargeComplete", {
+          detail: stationId.toNumber(),
         });
-        setStations(updatedStations);
+
+        setTimeout(() => {
+          setInUseUntil(stationId, null);
+          window.dispatchEvent(customEvent);
+        }, seconds * 1000);
+
+        setInUseUntil(stationId, Date.now() + seconds * 1000);
       });
 
       return () => {
