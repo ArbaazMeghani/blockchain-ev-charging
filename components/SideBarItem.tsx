@@ -28,10 +28,8 @@ const SideBarItem = ({
         </span>
         <h3>{item.price}ETH</h3>
       </div>
-      <div className="lg:text-base md:text-sm flex flex-col justify-start items-start overflow-hidden">
-        <h3 className="whitespace-nowrap overflow-hidden overflow-ellipsis">
-          {item.title}
-        </h3>
+      <div className="lg:text-base md:text-sm flex flex-col justify-start items-start">
+        <h3 className="overflow-hidden overflow-ellipsis">{item.title}</h3>
         <h3>{item.address}</h3>
       </div>
     </div>
