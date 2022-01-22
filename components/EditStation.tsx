@@ -111,7 +111,7 @@ const EditStation = ({ currentStation, onClose, onSave }) => {
 
           <div className="w-full border-b-2 border-gray-300 mb-4" />
           <div className="flex flex-row justify-end items-end w-full">
-            <PrimaryButton value="save" />
+            <PrimaryButton value="save" type="submit"/>
             <SecondaryButton onClick={onClose} value="cancel" />
           </div>
         </div>

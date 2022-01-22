@@ -91,6 +91,11 @@ const Station = ({
     }
   };
 
+  const onWithdraw = async () => {
+    const contractWithSigner = stationsContract.connect(wallet.signer);
+    await contractWithSigner.withdrawEarningsFromStation(station.id);
+  };
+
   return (
     <Modal onClose={onClose}>
       <form
@@ -204,6 +209,7 @@ const Station = ({
           )}
           <div />
           <div className="flex flex-row justify-end items-center">
+            {owner && <PrimaryButton onClick={onWithdraw} value={"withdraw"} />}
             {owner && <PrimaryButton onClick={onEdit} value={"edit"} />}
             <SecondaryButton onClick={onClose} value={"close"} />
           </div>

@@ -11,6 +11,8 @@ import { MapRef } from "react-map-gl";
 import useStations from "../hooks/useStations";
 import stationUtils from "../utils";
 import Map from "../components/Map";
+import Modal from "../components/Modal";
+import InstructionsModal from "../components/InstructionsModal";
 
 const defaultStation = {
   id: 0,
@@ -79,6 +81,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-row justify-start items-start h-screen w-full overflow-hidden bg-gradient-to-b from-violet-800 to-indigo-900 text-slate-300">
+      <InstructionsModal />
       <SideBar
         stations={stations}
         setLocation={setLocation}
