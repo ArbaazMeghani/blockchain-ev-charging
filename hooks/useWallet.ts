@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
+declare let window: any;
+
 const useWallet = () => {
   const [address, setAddress] = useState(null);
   const [signer, setSigner] = useState(null);
