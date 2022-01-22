@@ -98,6 +98,7 @@ export default function Home() {
         hoveringStation={hoveringStation}
         onHoverStation={setHoveringStation}
         ref={mapRef}
+        mapRef={undefined}
       />
       <PlusButton onClick={createStation} />
       <div className="hidden md:block absolute top-0 right-0 mr-12 mt-12">
