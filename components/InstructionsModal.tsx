@@ -30,7 +30,7 @@ const InstructionsModal = () => {
               Get test ether{" "}
               <a
                 className="text-blue-500 hover:text-blue-300 transition-colors duration-300"
-                href=""
+                href="https://faucets.chain.link/rinkeby"
               >
                 here
               </a>
