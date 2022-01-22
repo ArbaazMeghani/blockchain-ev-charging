@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ethers } from "../backend/node_modules/ethers/lib";
+import { ethers } from "ethers";
 import useWallet from "../hooks/useWallet";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import StationIcon from "../icons/StationIcon";
