@@ -6,7 +6,7 @@ const NumberUnitInput = ({
   value,
   onChangeValue,
   options,
-  onChangeOption = () => {},
+  onChangeOption = (option) => {},
   selectedOption = null,
 }) => {
   return (

@@ -30,7 +30,7 @@ const Station = ({
   stationsContract,
 }) => {
   const wallet = useWallet();
-  const [energy, setEnergy] = useState("");
+  const [energy, setEnergy] = useState(0);
   const [wattageOption, setWattageOption] = useState(wattageOptions[0]);
   const [timeUnitOption, setTimeUnitOption] = useState(timeUnitOptions[0]);
   const [sufficientBalance, setSufficientBalance] = useState(true);
@@ -53,7 +53,7 @@ const Station = ({
   };
 
   useEffect(() => {
-    window.addEventListener("ChargeComplete", (event) => {
+    window.addEventListener("ChargeComplete", (event: any) => {
       const stationId = event.detail;
       if (stationId === station.id) {
         setCharging(false);
